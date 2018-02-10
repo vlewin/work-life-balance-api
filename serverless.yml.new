@@ -1,4 +1,4 @@
-service: aws-work-life-balance-api
+service: work-life-balance-api
 frameworkVersion: ">=1.1.0 <2.0.0"
 
 provider:
@@ -36,10 +36,9 @@ plugins:
 package:
   excludeDevDependencies: true
   include:
-   - dist/**
+   - api/**
   exclude:
     - .*
-    - app/**
     - package.json
     - package-lock.json
     - yarn.lock
@@ -51,49 +50,51 @@ package:
   #  - node_modules/**
 
 functions:
-  index:
-    handler: dist/controllers/records.index
-    description: Display all time record information.
+  authorizer:
+    handler: protected.handler
+    events:
+      - http:
+          path: protected
+          method: get
+          parameters:
+            querystrings:
+              url: true
+            headers:
+              foo: false
+            paths:
+              bar: false
+
+  hello:
+    handler: api/records/read.handler
     events:
       - http:
           path: records
           method: get
-
-  show:
-    handler: dist/controllers/records.show
-    description: Display a specific time record information.
-    events:
-      - http:
-          path: records/{id}
-          method: get
+          cors: true
+          integration: lambda
           request:
             parameters:
+              querystrings:
+                foo: true
               paths:
-                id: true
+                bar: true
+            template:
+              text/xhtml: '{ "stage" : "$context.stage" }'
+              application/json: '{ "httpMethod" : "$context.httpMethod" }'
 
-  create:
-    handler: dist/controllers/records.create
-    description: Create time record information.
-    events:
-      - http:
-          path: records
-          method: post
+          response:
+            headers:
+              Content-Type: integration.response.header.Content-Type
+              Cache-Control: "'max-age=120'"
 
-  update:
-    handler: dist/controllers/records.update
-    description: Update time record information.
-    events:
-      - http:
-          path: records
-          method: put
+  # create:
+  #   handler: api/create.handler
+  #   description: Submit time record information.
+  #   events:
+  #     - http:
+  #         path: records
+  #         method: post
 
-  destroy:
-    handler: dist/controllers/records.destroy
-    description: Delete time record information.
-    events:
-      - http:
-          path: records
-          method: delete
 
 resources:
   Resources:
@@ -112,4 +113,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: 'Records'
+        TableName: 'records'
