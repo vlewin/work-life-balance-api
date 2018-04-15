@@ -5,15 +5,21 @@ class ValidationHelper {
     this.validator = new Validator()
 
     const schema = {
-      'id': '/Record',
-      'type': 'object',
-      'properties': {
-        'id': {'type': 'string'},
-        'name': {'type': 'string'},
-        'description': {'type': 'string'}
+      id: '/Record',
+      type: 'object',
+      properties: {
+        user_id: { type: 'string' },
+        date: { type: 'string' },
+        month: { type: 'number' },
+        week: { type: 'number' },
+        start: { type: 'string' },
+        pause: { type: 'string' },
+        finish: { type: 'string' },
+        duration: { type: 'number' },
+        absence: { type: 'string' }
       },
-      'required': ['name'],
-      'additionalProperties': false
+      required: ['user_id', 'date'],
+      additionalProperties: false
     }
 
     this.validator.addSchema(schema, '/Record')

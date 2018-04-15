@@ -1,22 +1,21 @@
 {
   "scripts": {
-    "start": "serverless offline start",
+    "start": "yarn run transpile; serverless offline start",
     "transpile": "babel --presets es2015 app --out-dir dist",
-    "deploy": "yarn run transpile; sls deploy -s development",
+    "package": "yarn run transpile; sls package -v",
+    "deploy": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s development; yarn",
     "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "^2.192.0",
-    "babel-polyfill": "^6.26.0",
-    "jsonschema": "^1.2.2",
-    "parameter-validator": "^1.0.5",
-    "strong-params": "^0.7.1",
-    "uuid": "^3.2.1"
+    "dynamoose": "^0.8.7",
+    "jsonschema": "^1.2.2"
   },
+
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",

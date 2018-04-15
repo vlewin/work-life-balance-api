@@ -10,7 +10,7 @@
 
 ### Models
 #### ORMs
-- [practical](https://www.npmjs.com/package/practical)
+- [dynamodb](https://www.npmjs.com/package/dynamodb)
 - [npdynamodb](https://www.npmjs.com/package/npdynamodb)
 - [Best DynamoDB node library to use?](https://forum.serverless.com/t/best-dynamodb-node-library-to-use/1393/3)
 

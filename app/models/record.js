@@ -1,92 +1,83 @@
-const uuid = require('uuid')
-const AWS = require('aws-sdk')
+const dynamoose = require('dynamoose');
+const recordSchema = require('../schemas/record')
+const TABLE_NAME = process.env.RECORDS_TABLE || 'records-development'
+const connection = dynamoose.model(TABLE_NAME, recordSchema, { update: true })
 
-AWS.config.update({region: 'eu-central-1'})
-const DynamoDB = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
-// import dynamodb from 'serverless-dynamodb-client'
-const ValidationHelper = require('../helpers/validation')
-const ValidationError = require('jsonschema').ValidationError
-
-class Record {
-  constructor (record) {
-    this.record = Object.assign({ 'id': uuid.v4() }, record)
-    this.validator = new ValidationHelper()
+module.exports = class Record {
+  static get model() {
+    return connection
   }
 
-  static async all (limit = 50) {
-    console.log('All records with limit', limit)
-    try {
-      const data = await DynamoDB.scan({
-        TableName: 'Records',
-        Limit: limit
-      }).promise()
+  static async find_by_id(user_id) {
+    console.log('find_by_id', user_id)
+    // return this.model.query({ user_id: {eq: user_id }}).exec(function (err, records) {
+    //   console.log(err)
+    //   console.log(JSON.stringify(records));
+    // });
 
-      return data.Items
-    } catch (error) {
-      console.error(error)
-      return error
+    const response = await this.model.query({ user_id: {eq: user_id }}).exec()
+    return response
+  }
+
+  static async find_by_month(user_id, month) {
+    console.log('find_by_month', month)
+    const response = await this.model.query({ user_id: {eq: user_id }}).where({ month: {eq: month }}).exec()
+    return response
+
+    // return this.model.query({ user_id: {eq: user_id }}).where({ month: {eq: month }}).exec(function (err, records) {
+    //   console.log(err)
+    //   if(err) console.log(err)
+    //
+    //   console.log(user_id, month, '=>', records.length);
+    //   // Look at all the beagles
+    // });
+  }
+
+  static async find_by_week(user_id, week) {
+    console.log('find_by_week', user_id, week)
+    const response = await this.model.query({ user_id: { eq: user_id }}).where({ week: {eq: week }}).exec()
+    return response
+  }
+
+  static async all(params = {}) {
+    let response = []
+
+    if(params.user_id && params.week) {
+      response = await Record.find_by_week(params.user_id, params.week)
+    } else if (params.user_id && params.month) {
+      response = await Record.find_by_month(params.user_id, params.month)
+    } else {
+      console.log('Not implemented')
+      response = await this.find_by_id(params.user_id)
     }
+
+    return response
   }
 
-  static async find (id) {
-    console.log('Find', id)
-    try {
-      var params = {
-        Key: {
-          id: id
-        },
-        TableName: 'Records'
-      }
+  static async all(params = {}) {
+    let response = []
 
-      const data = await DynamoDB.get(params).promise()
-      return data.Item
-    } catch (error) {
-      console.error(error)
-      return error
+    if(params.user_id && params.week) {
+      response = await Record.find_by_week(params.user_id, params.week)
+    } else if (params.user_id && params.month) {
+      response = await Record.find_by_month(params.user_id, params.month)
+    } else {
+      response = await this.find_by_id(params.user_id)
     }
+
+    return response
   }
 
-  async isValid () {
-    try {
-      await this.validator.validate(this.record, '/Record')
-      return true
-    } catch (error) {
-      console.error('**** Validation error')
-      console.error(error)
-      return error
-    }
+  static async create(params = {}) {
+    console.log('*** Save')
+    console.log(params)
+    const record = new this.model(params)
+    const response = await record.save()
+    return response
   }
 
-  async save () {
-    try {
-      // const result = await this.validator.validate(record, '/Record')
-      await this.validator.validate(this.record, '/Record')
-      await DynamoDB.put({
-        TableName: 'Records',
-        Item: this.record,
-        ReturnConsumedCapacity: 'TOTAL'
-      }).promise()
-
-      return this.record
-    } catch (error) {
-      if (error instanceof Array && error[0] instanceof ValidationError) {
-        console.error('**** Validation error')
-        return error[0].message
-      } else {
-        console.error('**** Unhandled error')
-        return error
-      }
-    }
-  }
+  // constructor (record) {
+  //   console.log('***** Init', record)
+  //   this.model = this.constructor.model
+  // }
 }
-
-module.exports = Record
-
-// return this.validator.validate(taco, '/Taco').then(data => {
-//   console.log(params)
-//   console.log(data)
-//   return this.db.put(params).promise().then(data => {
-//     data = Object.assign({id: id}, data)
-//     return data
-//   })
-// })
