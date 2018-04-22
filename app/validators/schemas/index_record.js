@@ -1,11 +1,17 @@
 module.exports = {
-  id: '/IndexRecord',
   type: 'object',
   properties: {
-    user_id: { type: 'string' },
-    month: { type: 'number' },
-    week: { type: 'number' },
+    user_id: {
+      type: 'string',
+      minLength: 2,
+      maxLength: 15
+    },
+    month: {
+      type: 'integer'
+    },
+    week: {
+      type: 'integer'
+    }
   },
-  required: ['user_id'],
-  additionalProperties: false
+  required: ['user_id']
 }

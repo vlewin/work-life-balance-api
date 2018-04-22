@@ -4,29 +4,36 @@ const Validator = require('../validators/record')
 // TODO: Move to helpers
 const headers = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-  'Access-Control-Allow-Credentials': true,
+  // 'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+  // 'Access-Control-Allow-Credentials': true,
   'Content-Type': 'application/json'
 }
 
 module.exports = {
   index: async function (event, context, callback) {
     try {
-      if(event.queryStringParameters === null) {
-        throw new Error('Missing required params')
-      }
+      const params = event.queryStringParameters || {}
 
-      console.log('*** Query:', event.queryStringParameters)
-      const params = Validator.validate(event.queryStringParameters, 'index')
-      console.log('valid params', params)
+      // let params = event.queryStringParameters
+      //
+      // if (params.user_id) {
+      //   if (params.week) {
+      //     params.week = parseInt(params.week)
+      //   }
+      //
+      //   if (params.month) {
+      //     params.month = parseInt(params.month)
+      //   }
+      // } else {
+      //   throw new Error('Missing required params')
+      // }
 
-      const response = await Record.all(params)
+      const response = await Record.all(Validator.validate(params, 'index_record'))
       console.log('response', response)
-
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers })
     } catch (error) {
-      console.log('*** ERROR', error)
-      callback(null, { statusCode: 422, body: JSON.stringify(error), headers })
+      console.log('***', error.message)
+      callback(null, { statusCode: 422, body: JSON.stringify({ message: error.message }), headers })
     }
   },
 
