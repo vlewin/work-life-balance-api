@@ -1,15 +1,23 @@
 import recordValidator from '../../../app/validators/schema'
 
-describe.skip('Record validator', () => {
-  describe('Type coersion', () => {
-    test('validate', () => {
-      recordValidator.validate({}, 'index_record')
+describe('JSON schema validator', () => {
+  describe('Valid object', () => {
+    it('Validates required params', () => {
+      const result = recordValidator.validate({ user_id: '12345' }, 'index_record')
 
-      recordValidator.validate({ user_id: 'ssss', month: '5', week: '4'}, 'index')
+      expect(result).toEqual({ user_id: '12345' })
+    })
 
-      recordValidator.validate({ user_id: 'ssss', month: '5', week: 4 }, 'index')
+    it('Forces type coersion', () => {
+      const result = recordValidator.validate({ user_id: '12345', month: '1' }, 'index_record')
 
-      expect(true).toEqual(true)
+      expect(result).toEqual({ user_id: '12345', month: 1 })
+    })
+
+    it('Ignores additional params', () => {
+      const result = recordValidator.validate({ user_id: '12345', foo: 1 }, 'index_record')
+
+      expect(result).toEqual({ user_id: '12345' })
     })
   })
 })

@@ -11,14 +11,14 @@ provider:
   memorySize: 128
   timeout: 5
 
-  # usagePlan:
-  #   quota:
-  #     limit: 5000
-  #     offset: 2
-  #     period: MONTH
-  #   throttle:
-  #     burstLimit: 200
-  #     rateLimit: 100
+  usagePlan:
+    quota:
+      limit: 1000
+      offset: 2
+      period: WEEK
+    throttle:
+      burstLimit: 20
+      rateLimit: 10
 
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}

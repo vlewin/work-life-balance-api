@@ -8,20 +8,21 @@ module.exports = class Record {
     return connection
   }
 
-  static async find_by_id (userId) {
-    console.log('find_by_id', userId)
+  static async findById (userId) {
+    console.log('NOTE: findById', userId)
     // return this.model.query({ user_id: {eq: user_id }}).exec(function (err, records) {
     //   console.log(err)
     //   console.log(JSON.stringify(records));
     // });
 
-    const response = await this.model.query({ user_id: {eq: user_id }}).exec()
+    const response = await this.model.query({ user_id: { eq: userId } }).exec()
+    console.log('*** Returns', JSON.stringify(response))
     return response
   }
 
-  static async find_by_month (user_id, month) {
-    console.log('find_by_month', month)
-    const response = await this.model.query({ user_id: {eq: user_id }}).where({ month: {eq: month }}).exec()
+  static async findByMonth (userId, month) {
+    console.log('NOTE: findByMonth', month)
+    const response = await this.model.query({ user_id: { eq: userId } }).where({ month: { eq: month } }).exec()
     return response
 
     // return this.model.query({ user_id: {eq: user_id }}).where({ month: {eq: month }}).exec(function (err, records) {
@@ -33,43 +34,43 @@ module.exports = class Record {
     // });
   }
 
-  static async find_by_week (user_id, week) {
-    console.log('find_by_week', user_id, week)
-    const response = await this.model.query({ user_id: { eq: user_id }}).where({ week: {eq: week }}).exec()
+  static async findByWeek (userId, week) {
+    console.log('NOTE: findByWeek', userId, week)
+    const response = await this.model.query({ user_id: { eq: userId } }).where({ week: { eq: week } }).exec()
     return response
   }
+
+  // static async all (params = {}) {
+  //   let response = []
+  //
+  //   if (params.user_id && params.week) {
+  //     response = await Record.findByWeek(params.user_id, params.week)
+  //   } else if (params.user_id && params.month) {
+  //     response = await Record.findByMonth(params.user_id, params.month)
+  //   } else {
+  //     console.log('Not implemented')
+  //     response = await this.findById(params.user_id)
+  //   }
+  //
+  //   return response
+  // }
 
   static async all (params = {}) {
     let response = []
 
     if (params.user_id && params.week) {
-      response = await Record.find_by_week(params.user_id, params.week)
+      response = await Record.findByWeek(params.user_id, params.week)
     } else if (params.user_id && params.month) {
-      response = await Record.find_by_month(params.user_id, params.month)
+      response = await Record.findByMonth(params.user_id, params.month)
     } else {
-      console.log('Not implemented')
-      response = await this.find_by_id(params.user_id)
-    }
-
-    return response
-  }
-
-  static async all (params = {}) {
-    let response = []
-
-    if (params.user_id && params.week) {
-      response = await Record.find_by_week(params.user_id, params.week)
-    } else if (params.user_id && params.month) {
-      response = await Record.find_by_month(params.user_id, params.month)
-    } else {
-      response = await this.find_by_id(params.user_id)
+      response = await this.findById(params.user_id)
     }
 
     return response
   }
 
   static async create (params = {}) {
-    console.log('*** Save')
+    console.log('NOTE: create')
     console.log(params)
     const record = new this.model(params)
     const response = await record.save()

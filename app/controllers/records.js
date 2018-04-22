@@ -13,23 +13,9 @@ module.exports = {
   index: async function (event, context, callback) {
     try {
       const params = event.queryStringParameters || {}
-
-      // let params = event.queryStringParameters
-      //
-      // if (params.user_id) {
-      //   if (params.week) {
-      //     params.week = parseInt(params.week)
-      //   }
-      //
-      //   if (params.month) {
-      //     params.month = parseInt(params.month)
-      //   }
-      // } else {
-      //   throw new Error('Missing required params')
-      // }
-
+      console.log('Validation', Validator.validate(params, 'index_record'))
       const response = await Record.all(Validator.validate(params, 'index_record'))
-      console.log('response', response)
+      console.log('Response', response)
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers })
     } catch (error) {
       console.log('***', error.message)
@@ -47,34 +33,14 @@ module.exports = {
   },
 
   create: async function (event, context, callback) {
-    // callback(null, {
-    //   statusCode: 200,
-    //   body: JSON.stringify(event),
-    //   headers
-    // })
-
     try {
-      const body = JSON.parse(event.body)
-      console.log('***', body)
-
-      const params = Validator.validate(body, 'create')
-      console.log('valid params', params)
-
-      const response = await Record.create(body)
-
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(response),
-        headers
-      })
+      const body = typeof (event.body) === 'string' ? JSON.parse(event.body) : event.body
+      const params = Validator.validate(body, 'create_record')
+      const response = await Record.create(params)
+      callback(null, { statusCode: 200, body: JSON.stringify(response), headers })
     } catch (error) {
       console.error('Error', error)
-      callback(null, {
-        statusCode: 422,
-        body: error.message,
-        headers
-      })
-      return error
+      callback(null, { statusCode: 422, body: error.message, headers })
     }
   },
 
