@@ -6,6 +6,7 @@ provider:
   runtime: nodejs8.10
   stage: developement
   region: eu-central-1
+  profile: vlewin
   cfLogs: true
   memorySize: 128
   timeout: 5
