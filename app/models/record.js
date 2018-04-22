@@ -1,15 +1,15 @@
-const dynamoose = require('dynamoose');
-const recordSchema = require('../schemas/record')
+const dynamoose = require('dynamoose')
+const recordSchema = require('./schemas/record')
 const TABLE_NAME = process.env.RECORDS_TABLE || 'records-development'
 const connection = dynamoose.model(TABLE_NAME, recordSchema, { update: true })
 
 module.exports = class Record {
-  static get model() {
+  static get model () {
     return connection
   }
 
-  static async find_by_id(user_id) {
-    console.log('find_by_id', user_id)
+  static async find_by_id (userId) {
+    console.log('find_by_id', userId)
     // return this.model.query({ user_id: {eq: user_id }}).exec(function (err, records) {
     //   console.log(err)
     //   console.log(JSON.stringify(records));
@@ -19,7 +19,7 @@ module.exports = class Record {
     return response
   }
 
-  static async find_by_month(user_id, month) {
+  static async find_by_month (user_id, month) {
     console.log('find_by_month', month)
     const response = await this.model.query({ user_id: {eq: user_id }}).where({ month: {eq: month }}).exec()
     return response
@@ -33,16 +33,16 @@ module.exports = class Record {
     // });
   }
 
-  static async find_by_week(user_id, week) {
+  static async find_by_week (user_id, week) {
     console.log('find_by_week', user_id, week)
     const response = await this.model.query({ user_id: { eq: user_id }}).where({ week: {eq: week }}).exec()
     return response
   }
 
-  static async all(params = {}) {
+  static async all (params = {}) {
     let response = []
 
-    if(params.user_id && params.week) {
+    if (params.user_id && params.week) {
       response = await Record.find_by_week(params.user_id, params.week)
     } else if (params.user_id && params.month) {
       response = await Record.find_by_month(params.user_id, params.month)
@@ -54,10 +54,10 @@ module.exports = class Record {
     return response
   }
 
-  static async all(params = {}) {
+  static async all (params = {}) {
     let response = []
 
-    if(params.user_id && params.week) {
+    if (params.user_id && params.week) {
       response = await Record.find_by_week(params.user_id, params.week)
     } else if (params.user_id && params.month) {
       response = await Record.find_by_month(params.user_id, params.month)
@@ -68,7 +68,7 @@ module.exports = class Record {
     return response
   }
 
-  static async create(params = {}) {
+  static async create (params = {}) {
     console.log('*** Save')
     console.log(params)
     const record = new this.model(params)

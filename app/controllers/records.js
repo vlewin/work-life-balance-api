@@ -1,5 +1,5 @@
 const Record = require('../models/record')
-const Validator = require('../validators/record')
+const Validator = require('../validators/schema')
 
 // TODO: Move to helpers
 const headers = {

@@ -1,5 +1,5 @@
 // const dynamoose = require('dynamoose');
-const Schema = require('dynamoose').Schema;
+const Schema = require('dynamoose').Schema
 
 module.exports = new Schema({
   user_id: {
@@ -10,7 +10,7 @@ module.exports = new Schema({
   date: {
     type: String,
     required: true,
-    rangeKey: true,
+    rangeKey: true
   },
 
   month: {
@@ -44,5 +44,5 @@ module.exports = new Schema({
   absence: String
 },
 {
-  throughput: {read: 1, write: 1},
-});
+  throughput: {read: 1, write: 1}
+})
