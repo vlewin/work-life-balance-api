@@ -6,6 +6,7 @@
 - [Rails-style implementation of strong parameters for Node.js](https://www.npmjs.com/package/strong-params)
 - [parameter-validator](https://www.npmjs.com/package/parameter-validator)
 - [validator](https://www.npmjs.com/package/validator)
+- [z-schema](https://github.com/zaggino/z-schema)
 
 
 ### Models
