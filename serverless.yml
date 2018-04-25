@@ -23,6 +23,7 @@ provider:
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
     RECORDS_TABLE: "records-${opt:stage, self:provider.stage}"
+    
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -64,6 +65,25 @@ package:
 
 
 functions:
+  authorizer:
+    handler: app/authorizer/index.handler
+  
+  test:
+    handler: app/controllers/test.index
+    description: Test custom auth0 authorizer.
+    events:
+      - http:
+          authorizer: authorizer
+          path: test
+          method: get
+          cors: true
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token    
+  
   index:
     handler: app/controllers/records.index
     description: Display all time record information.
