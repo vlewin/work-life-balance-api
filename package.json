@@ -2,22 +2,23 @@
   "scripts": {
     "start": "serverless offline start -s development",
     "package": "yarn run transpile; sls package -v",
-    "deploy": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s development; yarn",
+    "deploy": "yarn install --production --ignore-scripts --prefer-offline; yarn autoclean --force; sls deploy -s development; yarn",
     "test": "jest ./tests",
     "test:watch": "jest ./tests --watch"
   },
   "dependencies": {
     "dynamoose": "^0.8.7",
     "jjv": "^1.0.2",
-    "jjve": "^0.5.2"
+    "jjve": "^0.5.2",
+    "jsonwebtoken": "^8.2.1",
+    "jwk-to-pem": "^2.0.0",
+    "request": "^2.85.0"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
     "eslint": "^4.17.0",
     "eslint-config-standard": "^11.0.0",
