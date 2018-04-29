@@ -13,7 +13,10 @@ module.exports = {
   index: async function (event, context, callback) {
     try {
       const params = event.queryStringParameters || {}
+      params.user_id = event.requestContext.authorizer.principalId
+
       console.log('Validation', Validator.validate(params, 'index_record'))
+      // FIXME: Record.all should take 2 parameters user_id and params
       const response = await Record.all(Validator.validate(params, 'index_record'))
       console.log('Response', response)
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers })
@@ -34,7 +37,11 @@ module.exports = {
 
   create: async function (event, context, callback) {
     try {
+      console.log('*************** EVENT ****************')
+      console.log(event.requestContext)
+
       const body = typeof (event.body) === 'string' ? JSON.parse(event.body) : event.body
+      body.user_id = event.requestContext.authorizer.principalId
       const params = Validator.validate(body, 'create_record')
       const response = await Record.create(params)
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers })

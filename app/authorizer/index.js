@@ -10,21 +10,17 @@ const request = require('request')
 
 // Generate policy to allow this user on this API:
 const generatePolicy = (principalId, effect, resource) => {
-  const authResponse = {}
-  authResponse.principalId = principalId
+  const authResponse = { principalId: principalId }
+
   if (effect && resource) {
-    const policyDocument = {}
-    policyDocument.Version = '2012-10-17'
-    policyDocument.Statement = []
-
-    const statementOne = {}
-
-    statementOne.Action = 'execute-api:Invoke'
-    statementOne.Effect = effect
-    statementOne.Resource = resource
-    policyDocument.Statement[0] = statementOne
+    const statementOne = { Action: 'execute-api:Invoke', Effect: effect, Resource: resource }
+    const policyDocument = { Version: '2012-10-17', Statement: [statementOne] }
     authResponse.policyDocument = policyDocument
   }
+
+  console.log('authResponse')
+  console.log(authResponse)
+  // authResponse.context = { authId: principalId }
   return authResponse
 }
 
@@ -42,7 +38,7 @@ module.exports.handler = (event, context, callback) => {
     // Remove 'bearer ' from token:
     // const token = event.authorizationToken.substring(7)
     const token = event.authorizationToken.replace('Bearer ', '')
-    console.log(token)
+    // console.log(token)
 
     // Make a request to the iss + .well-known/jwks.json URL:
     request({ url: `${iss}.well-known/jwks.json`, json: true }, (error, response, body) => {

@@ -2,7 +2,7 @@
   "scripts": {
     "start": "serverless offline start -s development",
     "package": "yarn run transpile; sls package -v",
-    "deploy": "yarn install --production --ignore-scripts --prefer-offline; yarn autoclean --force; sls deploy -s development; yarn",
+    "deploy": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s development; yarn",
     "test": "jest ./tests",
     "test:watch": "jest ./tests --watch"
   },
