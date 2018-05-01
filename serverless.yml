@@ -39,7 +39,8 @@ provider:
       # Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 plugins:
-  - serverless-offline
+  # - serverless-offline
+  # - serverless-plugin-stage-variables
 
 package:
   excludeDevDependencies: true
@@ -83,8 +84,7 @@ functions:
             - Content-Type
             - X-Amz-Date
             - Authorization
-            - X-Api-Key
-            - X-Amz-Security-Token
+
 
   index:
     handler: app/controllers/records.index
@@ -95,6 +95,10 @@ functions:
           path: records
           method: get
           cors: true
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
 
   create:
     handler: app/controllers/records.create
@@ -105,65 +109,9 @@ functions:
           path: records
           method: post
           cors: true
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
 
-  # show:
-  #   handler: dist/controllers/records.show
-  #   description: Display a specific time record information.
-  #   events:
-  #     - http:
-  #         path: records/{id}
-  #         method: get
-  #         cors: true
-  #         request:
-  #           parameters:
-  #             paths:
-  #               id: true
-
-
-
-
-  # update:
-  #   handler: dist/controllers/records.update
-  #   description: Update time record information.
-  #   events:
-  #     - http:
-  #         path: records
-  #         method: put
-  #         cors: true
-  #
-  #
-  # destroy:
-  #   handler: dist/controllers/records.destroy
-  #   description: Delete time record information.
-  #   events:
-  #     - http:
-  #         path: records
-  #         method: delete
-  #         cors: true
-
-# https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.04.html
-# resources:
-#   Resources:
-#     RecordsDynamoDbTable:
-#       Type: 'AWS::DynamoDB::Table'
-#       DeletionPolicy: Delete
-#       Properties:
-#         AttributeDefinitions:
-#           -
-#             AttributeName: week
-#             AttributeType: N
-#           -
-#             AttributeName: date
-#             AttributeType: S
-#
-#         KeySchema:
-#           -
-#             AttributeName: week
-#             KeyType: HASH
-#           -
-#             AttributeName: date
-#             KeyType: RANGE
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
-#         TableName: ${self:provider.environment.RECORDS_TABLE}
+          

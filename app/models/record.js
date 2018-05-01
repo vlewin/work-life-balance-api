@@ -1,7 +1,7 @@
 const dynamoose = require('dynamoose')
-const recordSchema = require('./schemas/record')
+const schema = require('./schemas/record')
 const TABLE_NAME = process.env.RECORDS_TABLE || 'records-development'
-const connection = dynamoose.model(TABLE_NAME, recordSchema, { update: true })
+const connection = dynamoose.model(TABLE_NAME, schema, { update: true })
 
 module.exports = class Record {
   static get model () {
@@ -71,6 +71,26 @@ module.exports = class Record {
 
   static async create (params = {}) {
     console.log('NOTE: create')
+    let response = {}
+    if (Array.isArray(params)) {
+      response = await this.saveAll(params)
+    } else {
+      response = await this.saveOn(params)
+    }
+
+    return response
+  }
+
+  static async saveAll (params = []) {
+    console.log('NOTE: saveAll')
+    console.log(params)
+    const response = await this.model.batchPut(params)
+    // const response = await record.save()
+    return response
+  }
+
+  static async saveOn (params = {}) {
+    console.log('NOTE: saveOn')
     console.log(params)
     const record = new this.model(params)
     const response = await record.save()

@@ -12,29 +12,37 @@ const request = require('request')
 const generatePolicy = (principalId, effect, resource) => {
   const authResponse = { principalId: principalId }
 
+  console.log('Generate policy for', principalId, effect, resource)
   if (effect && resource) {
-    const statementOne = { Action: 'execute-api:Invoke', Effect: effect, Resource: resource }
+    const statementOne = { Action: 'execute-api:Invoke', Effect: effect, Resource: '*' }
     const policyDocument = { Version: '2012-10-17', Statement: [statementOne] }
     authResponse.policyDocument = policyDocument
   }
 
   console.log('authResponse')
-  console.log(authResponse)
-  // authResponse.context = { authId: principalId }
+  console.log(JSON.stringify(authResponse))
+  authResponse.context = { authId: principalId, foo: 'TEST' }
   return authResponse
+}
+
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization',
+  'Access-Control-Allow-Credentials': true,
+  'Content-Type': 'application/json'
 }
 
 // Reusable Authorizer function, set on `authorizer` field in serverless.yml
 module.exports.handler = (event, context, callback) => {
-  console.log('event')
+  console.log('**** Event ****')
   console.log(event)
-  console.log('context')
+  console.log('**** Context ****')
   console.log(context)
-  console.log('Auth function invoked')
 
   const iss = 'https://work-life-balance.eu.auth0.com/'
 
   if (event.authorizationToken) {
+    console.log('**** FOUND AUTH TOKEN ****')
     // Remove 'bearer ' from token:
     // const token = event.authorizationToken.substring(7)
     const token = event.authorizationToken.replace('Bearer ', '')
@@ -60,15 +68,17 @@ module.exports.handler = (event, context, callback) => {
       // Verify the token:
       jwk.verify(token, pem, { issuer: iss }, (err, decoded) => {
         if (err) {
-          console.log('Unauthorized user:', err.message)
+          console.log('**** JWT TOKEN IS INVALID:', err.message)
           callback('Unauthorized')
+          // callback('Unauthorized', { statusCode: 403, headers: headers, body: err.message })
         } else {
+          console.log('**** ALL GREEN:', decoded.sub, 'ALLOW', event.methodArn)
           callback(null, generatePolicy(decoded.sub, 'Allow', event.methodArn))
         }
       })
     })
   } else {
-    console.log('No authorizationToken found in the header.')
+    console.log('**** NO AUTH TOKEN')
     callback('Unauthorized')
   }
 }

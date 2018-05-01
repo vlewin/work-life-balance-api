@@ -37,6 +37,26 @@ module.exports = new Schema({
     }
   },
 
+  type: {
+    type: String,
+    required: false,
+    default: 'presence',
+    validate: (v) => ['absence', 'presence'].includes(v),
+    index: {
+      global: false,
+      hashKey: 'user_id',
+      name: 'RecordTypeLocalIndex',
+      project: true, // ProjectionType: ALL
+      throughput: 1 // read and write are both 5
+    }
+  },
+
+  reason: {
+    type: String,
+    required: false,
+    validate: (v) => ['vacation', 'sickeness', 'holiday'].includes(v)
+  },
+
   start: String,
   pause: String,
   finish: String,

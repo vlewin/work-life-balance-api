@@ -4,8 +4,8 @@ const Validator = require('../validators/schema')
 // TODO: Move to helpers
 const headers = {
   'Access-Control-Allow-Origin': '*',
-  // 'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-  // 'Access-Control-Allow-Credentials': true,
+  'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization',
+  'Access-Control-Allow-Credentials': true,
   'Content-Type': 'application/json'
 }
 
@@ -36,29 +36,34 @@ module.exports = {
   },
 
   create: async function (event, context, callback) {
+    console.log('============= CREATE ===================')
+
     try {
       console.log('*************** EVENT ****************')
-      console.log(event.requestContext)
+      console.log(event.requestContext.authorizer)
 
       const body = typeof (event.body) === 'string' ? JSON.parse(event.body) : event.body
+
+      console.log('*************** BODY ****************')
+      console.log(body)
       body.user_id = event.requestContext.authorizer.principalId
       const params = Validator.validate(body, 'create_record')
       const response = await Record.create(params)
-      callback(null, { statusCode: 200, body: JSON.stringify(response), headers })
+      callback(null, { statusCode: 200, body: JSON.stringify(response), headers: headers })
     } catch (error) {
-      console.error('Error', error)
-      callback(null, { statusCode: 422, body: error.message, headers })
+      console.error('**** ERROR', JSON.stringify(error))
+      callback(null, { statusCode: 422, body: error.message, headers: headers })
     }
   },
 
   update: async function (event, context, callback) {
     // const result = await Record.save({ name: 'Huhu', description: 'haha' })
-    callback(null, { statusCode: 200, body: 'result', headers })
+    callback(null, { statusCode: 200, body: 'result', headers: headers })
   },
 
   destroy: async function (event, context, callback) {
     // const result = await Record.save({ name: 'Huhu', description: 'haha' })
-    callback(null, { statusCode: 200, body: 'result', headers })
+    callback(null, { statusCode: 200, body: 'result', headers: headers })
   }
 }
 

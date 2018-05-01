@@ -1,27 +1,29 @@
-require('babel-polyfill')
-const Record = require('../models/record')
+const Absence = require('../models/absence')
+const Validator = require('../validators/schema')
 
+// TODO: Move to helpers
 const headers = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+  'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization',
   'Access-Control-Allow-Credentials': true,
   'Content-Type': 'application/json'
 }
 
-// const headers = {
-//   "Access-Control-Allow-Origin" : "*"
-// }
-
 module.exports = {
   index: async function (event, context, callback) {
-    const params = event.queryStringParameters || {}
-    const response = await Record.all(params.week)
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(response),
-      headers
-    })
+    try {
+      const params = event.queryStringParameters || {}
+      params.user_id = event.requestContext.authorizer.principalId
+
+      console.log('Validation', Absence.validate(params, 'index_absence'))
+      // FIXME: Record.all should take 2 parameters user_id and params
+      const response = await Absence.all(Validator.validate(params, 'index_absence'))
+      console.log('Response', response)
+      callback(null, { statusCode: 200, body: JSON.stringify(response), headers })
+    } catch (error) {
+      console.log('***', error.message)
+      callback(null, { statusCode: 422, body: JSON.stringify({ message: error.message }), headers })
+    }
   },
 
   show: async function (event, context, callback) {
@@ -35,53 +37,19 @@ module.exports = {
 
   create: async function (event, context, callback) {
     try {
-      const body = JSON.parse(event.body)
-      let response = {}
-      if (body.records) {
-        response = await new Record(body).save()
-      } else {
-        response = await new Record(body).save()
-      }
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(response),
-        headers
-      })
+      console.log('*************** EVENT ****************')
+      console.log(event.requestContext)
+
+      const body = typeof (event.body) === 'string' ? JSON.parse(event.body) : event.body
+      body.user_id = event.requestContext.authorizer.principalId
+      const params = Validator.validate(body, 'create_record')
+      const response = await Record.create(params)
+      callback(null, { statusCode: 200, body: JSON.stringify(response), headers })
     } catch (error) {
       console.error('Error', error)
-      callback(null, {
-        statusCode: 422,
-        body: error.message,
-        headers
-      })
-      return error
+      callback(null, { statusCode: 422, body: error.message, headers })
     }
   },
-
-  // create: async function (event, context, callback) {
-  //   // callback(null, {
-  //   //   statusCode: 200,
-  //   //   body: JSON.stringify(event),
-  //   //   headers
-  //   // })
-  //
-  //   try {
-  //     const response = await new Record(JSON.parse(event.body)).save()
-  //     callback(null, {
-  //       statusCode: 200,
-  //       body: JSON.stringify(response),
-  //       headers
-  //     })
-  //   } catch (error) {
-  //     console.error('Error', error)
-  //     callback(null, {
-  //       statusCode: 422,
-  //       body: error.message,
-  //       headers
-  //     })
-  //     return error
-  //   }
-  // },
 
   update: async function (event, context, callback) {
     // const result = await Record.save({ name: 'Huhu', description: 'haha' })
@@ -93,3 +61,33 @@ module.exports = {
     callback(null, { statusCode: 200, body: 'result', headers })
   }
 }
+
+// module.exports.index = async (event, context, callback) => {
+//   const record = new Record()
+//   const result = await record.save({ name: 'Huhu', description: 'haha' })
+//   callback(null, { statusCode: 200, body: result })
+// }
+//
+// module.exports.show = async (event, context, callback) => {
+//   const record = new Record()
+//   const result = await record.save({ name: 'Huhu', description: 'haha' })
+//   callback(null, { statusCode: 200, body: result })
+// }
+//
+// module.exports.create = async (event, context, callback) => {
+//   const record = new Record()
+//   const result = await record.save({ name: 'Huhu', description: 'haha' })
+//   callback(null, { statusCode: 200, body: result })
+// }
+//
+// module.exports.update = async (event, context, callback) => {
+//   const record = new Record()
+//   const result = await record.save({ name: 'Huhu', description: 'haha' })
+//   callback(null, { statusCode: 200, body: result })
+// }
+//
+// module.exports.destroy = async (event, context, callback) => {
+//   const record = new Record()
+//   const result = await record.save({ name: 'Huhu', description: 'haha' })
+//   callback(null, { statusCode: 200, body: result })
+// }
