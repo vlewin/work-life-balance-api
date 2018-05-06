@@ -20,21 +20,22 @@ module.exports = class Record extends Timestamp {
 
   static async findByMonth (userId, month) {
     console.log('NOTE: findByMonth', month)
+    // const response = await this.connection.query({
+    //   user_id: { eq: userId }
+    // }).where(
+    //   { month: { eq: month }
+    // }).exec()
+    //
+    // return response
+
+    const range = datetime.getStartEndByMonth(month)
     const response = await this.connection.query({
       user_id: { eq: userId }
-    }).where(
-      { month: { eq: month }
-    }).exec()
+    }).where({
+      type: { eq: 'presence' }
+    }).filter('timestamp').between(range[0], range[1]).exec()
 
     return response
-
-    // return this.connection.query({ user_id: {eq: user_id }}).where({ month: {eq: month }}).exec(function (err, records) {
-    //   console.log(err)
-    //   if(err) console.log(err)
-    //
-    //   console.log(user_id, month, '=>', records.length);
-    //   // Look at all the beagles
-    // });
   }
 
   static async findByWeek (userId, week) {
@@ -44,7 +45,7 @@ module.exports = class Record extends Timestamp {
     // }).where({
     //   week: { eq: week }
     // }).exec()
-    const range = datetime.getStartEndByISOWeek(week)
+    const range = datetime.getStartEndByWeek(week)
     const response = await this.connection.query({
       user_id: { eq: userId }
     }).where({

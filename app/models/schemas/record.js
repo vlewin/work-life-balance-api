@@ -34,7 +34,7 @@ module.exports = new Schema({
 
   month: {
     type: Number,
-    required: true,
+    required: false,
     index: {
       global: false,
       hashKey: 'user_id',
@@ -46,7 +46,7 @@ module.exports = new Schema({
 
   week: {
     type: Number,
-    required: true,
+    required: false,
     index: {
       global: false,
       hashKey: 'user_id',

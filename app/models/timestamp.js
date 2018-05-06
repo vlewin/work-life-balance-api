@@ -46,7 +46,7 @@ module.exports = class Timestamp {
     return {
       ...data,
       ...{
-        date: date.toLocaleDateString('DE'),
+        date: date.toDateString(),
         month: date.getMonth() + 1, // Index starts with 0
         week: getISOWeek(date),
         duration: duration
