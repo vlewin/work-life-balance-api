@@ -1,19 +1,21 @@
 module.exports = {
-  type: 'object',
-  properties: {
-    user_id: {
-      type: 'string',
-      minLength: 2,
-      maxLength: 15
+  "type": "object",
+  "properties": {
+    "user_id": { "type": "string" },
+    "timestamp": { "type": "number" },
+    // "date": { "type": "string", format: 'date-time' },
+    "date": { "type": "string" },
+    "start": { "type": "string" },
+    "pause": { "type": "string" },
+    "end": { "type": "string" },
+    "duration": { "type": "number" },
+    "reason": {
+      "enum": [ "vacation","sickeness", "holidy", "" ]
     },
-    date: { type: 'string' },
-    month: { type: 'integer' },
-    week: { type: 'integer' },
-    start: { type: 'string' },
-    pause: { type: 'string' },
-    finish: { type: 'string' },
-    duration: { type: 'integer' },
-    absence: { type: 'string' }
+
+    "type": {
+      "enum": [ "absence","presence" ], "default": "presence"
+    }
   },
-  required: ['user_id', 'date', 'month', 'week']
+  "required": [ "user_id", "timestamp", "start", "pause", "end" ]
 }

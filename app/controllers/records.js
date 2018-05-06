@@ -9,12 +9,27 @@ const headers = {
   'Content-Type': 'application/json'
 }
 
+// TODO: Move to helpers
+const getParams = (event) => {
+  let params = { user_id: event.requestContext.authorizer.principalId }
+
+  if(event.httpMethod === 'GET') {
+    return Object.assign(params, event.queryStringParameters)
+  }
+
+  if(event.httpMethod === 'POST') {
+    const body = typeof (event.body) === 'string' ? JSON.parse(event.body) : event.body
+    return Object.assign(params, body)
+  }
+}
+
 module.exports = {
   index: async function (event, context, callback) {
     try {
-      const params = event.queryStringParameters || {}
-      params.user_id = event.requestContext.authorizer.principalId
+      // const params = event.queryStringParameters || {}
+      // params.user_id = event.requestContext.authorizer.principalId
 
+      const params = getParams(event)
       console.log('Validation', Validator.validate(params, 'index_record'))
       // FIXME: Record.all should take 2 parameters user_id and params
       const response = await Record.all(Validator.validate(params, 'index_record'))
@@ -26,14 +41,14 @@ module.exports = {
     }
   },
 
-  show: async function (event, context, callback) {
-    const response = await Record.find(event.pathParameters.id)
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(response),
-      headers
-    })
-  },
+  // show: async function (event, context, callback) {
+  //   const response = await Record.find(event.pathParameters.id)
+  //   callback(null, {
+  //     statusCode: 200,
+  //     body: JSON.stringify(response),
+  //     headers
+  //   })
+  // },
 
   create: async function (event, context, callback) {
     console.log('============= CREATE ===================')
@@ -48,7 +63,8 @@ module.exports = {
       console.log(body)
       body.user_id = event.requestContext.authorizer.principalId
       const params = Validator.validate(body, 'create_record')
-      const response = await Record.create(params)
+      const response = await new Record(params).save()
+
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers: headers })
     } catch (error) {
       console.error('**** ERROR', JSON.stringify(error))

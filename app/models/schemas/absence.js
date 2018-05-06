@@ -7,6 +7,12 @@ module.exports = new Schema({
     hashKey: true
   },
 
+  timestamp: {
+    type: String,
+    required: true,
+    rangeKey: true
+  },
+  
   date: {
     type: String,
     required: true,
@@ -37,6 +43,8 @@ module.exports = new Schema({
     }
   },
 
+  duration: Number,
+
   type: {
     type: String,
     required: false,
@@ -55,9 +63,7 @@ module.exports = new Schema({
     type: String,
     required: false,
     validate: (v) => ['vacation', 'sickeness', 'holiday'].includes(v)
-  },
-
-  duration: Number
+  }
 },
 {
   throughput: {read: 1, write: 1}

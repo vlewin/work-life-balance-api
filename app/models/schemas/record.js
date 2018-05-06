@@ -7,10 +7,29 @@ module.exports = new Schema({
     hashKey: true
   },
 
+  // timestamp: {
+  //   type: Number,
+  //   required: true,
+  //   rangeKey: true
+  // },
   date: {
     type: String,
     required: true,
     rangeKey: true
+  },
+
+
+  timestamp: {
+    type: Number,
+    required: true,
+    rangeKey: true,
+    index: {
+      global: false,
+      hashKey: 'user_id',
+      name: 'TimestampLocalIndex',
+      project: true, // ProjectionType: ALL
+      throughput: 1 // read and write are both 5
+    }
   },
 
   month: {
@@ -37,6 +56,11 @@ module.exports = new Schema({
     }
   },
 
+  start: String,
+  pause: String,
+  end: String,
+  duration: Number,
+
   type: {
     type: String,
     required: false,
@@ -45,7 +69,7 @@ module.exports = new Schema({
     index: {
       global: false,
       hashKey: 'user_id',
-      name: 'RecordTypeLocalIndex',
+      name: 'UserIdTypeLocalIndex',
       project: true, // ProjectionType: ALL
       throughput: 1 // read and write are both 5
     }
@@ -54,14 +78,16 @@ module.exports = new Schema({
   reason: {
     type: String,
     required: false,
-    validate: (v) => ['vacation', 'sickeness', 'holiday'].includes(v)
-  },
-
-  start: String,
-  pause: String,
-  finish: String,
-  duration: Number,
-  absence: String
+    default: null,
+    validate: (v) => ['vacation', 'sickeness', 'holiday', null].includes(v),
+    index: {
+      global: false,
+      hashKey: 'user_id',
+      name: 'UserIdReasonLocalIndex',
+      project: true, // ProjectionType: ALL
+      throughput: 1 // read and write are both 5
+    }
+  }
 },
 {
   throughput: {read: 1, write: 1}
