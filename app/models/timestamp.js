@@ -21,15 +21,6 @@ module.exports = class Timestamp {
     }
   }
 
-  // FIXME: Move to helpers?
-  // static _timeToNumber(time) {
-  //   if (time) {
-  //     const split = time.split(":")
-  //     return parseFloat(parseInt(split[0], 10) + "." + parseInt(split[1] / 6 * 10, 10))
-  //   }
-  //   return 0
-  // }
-
   // FIXME: Check if Object.keys(data).includes?(['start', 'pause', 'end'])
   static _calculateDuration(data) {
     console.log('*** duration', data)
