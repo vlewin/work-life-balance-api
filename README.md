@@ -12,6 +12,15 @@
 ## JSON schema validators
 https://github.com/DivineGod/ajv-error-messages
 
+Remote JSON schema???
+https://github.com/entrecode/json-schema-remote
+
+## npm-middlewares - A collection of middyJS custom middlewares for lambda functions
+https://github.com/Vin65/npm-middlewares
+
+## npm-auth0-authorizer - Auth0 API Gateway Custom Authorizer
+https://github.com/Vin65/npm-auth0-authorizer
+
 ## Serveless alternatives
 [Claudia.js](https://claudiajs.com/tutorials/lambda-api-dynamo-db.html)
 [AWS SAM](https://github.com/awslabs/serverless-application-model)
