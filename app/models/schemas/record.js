@@ -8,43 +8,22 @@ module.exports = new Schema({
 
   timestamp: {
     type: Number,
-    required: true,
-    rangeKey: true,
-    index: {
-      global: false,
-      hashKey: 'user_id',
-      name: 'TimestampLocalIndex',
-      project: true, // ProjectionType: ALL
-      throughput: 1 // read and write are both 5
-    }
+    required: false,
+    rangeKey: true
   },
 
   type: {
     type: String,
     required: false,
     default: 'presence',
-    validate: (v) => ['absence', 'presence'].includes(v),
-    index: {
-      global: false,
-      hashKey: 'user_id',
-      name: 'UserIdTypeLocalIndex',
-      project: true, // ProjectionType: ALL
-      throughput: 1 // read and write are both 5
-    }
+    validate: (v) => ['absence', 'presence'].includes(v)
   },
 
   reason: {
     type: String,
     required: false,
     default: null,
-    validate: (v) => ['vacation', 'sickeness', 'holiday', null].includes(v),
-    index: {
-      global: false,
-      hashKey: 'user_id',
-      name: 'UserIdReasonLocalIndex',
-      project: true, // ProjectionType: ALL
-      throughput: 1 // read and write are both 5
-    }
+    validate: (v) => ['vacation', 'sickeness', 'holiday', null].includes(v)
   },
 
   date: {

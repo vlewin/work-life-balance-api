@@ -9,9 +9,13 @@ const balance = {
 }
 
 
-const params = Validator.validate(balance, 'update_balance')
-console.log(params)
+// const params = Validator.validate(balance, 'update_balance')
+// console.log(params)
+//
+// let response = Balance.update(params)
+//
+// Balance.findById('github|611466')
 
-let response = Balance.update(params)
 
-Balance.findById('github|611466')
+const LambdaHelper = require('../app/helpers/lambda')
+console.log(LambdaHelper.headers)
