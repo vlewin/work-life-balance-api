@@ -1,4 +1,3 @@
-// const dynamoose = require('dynamoose');
 const Schema = require('dynamoose').Schema
 
 module.exports = new Schema({
@@ -6,18 +5,6 @@ module.exports = new Schema({
     type: String,
     hashKey: true
   },
-
-  // timestamp: {
-  //   type: Number,
-  //   required: true,
-  //   rangeKey: true
-  // },
-  date: {
-    type: String,
-    required: true,
-    rangeKey: true
-  },
-
 
   timestamp: {
     type: Number,
@@ -31,35 +18,6 @@ module.exports = new Schema({
       throughput: 1 // read and write are both 5
     }
   },
-
-  month: {
-    type: Number,
-    required: false,
-    index: {
-      global: false,
-      hashKey: 'user_id',
-      name: 'MonthLocalIndex',
-      project: true, // ProjectionType: ALL
-      throughput: 1 // read and write are both 5
-    }
-  },
-
-  week: {
-    type: Number,
-    required: false,
-    index: {
-      global: false,
-      hashKey: 'user_id',
-      name: 'WeekLocalIndex',
-      project: true, // ProjectionType: ALL
-      throughput: 1 // read and write are both 5
-    }
-  },
-
-  start: String,
-  pause: String,
-  end: String,
-  duration: Number,
 
   type: {
     type: String,
@@ -87,7 +45,17 @@ module.exports = new Schema({
       project: true, // ProjectionType: ALL
       throughput: 1 // read and write are both 5
     }
-  }
+  },
+
+  date: {
+    type: String,
+    required: true
+  },
+
+  start: String,
+  pause: String,
+  end: String,
+  duration: Number
 },
 {
   throughput: {read: 1, write: 1}
