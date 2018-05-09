@@ -1,28 +1,28 @@
 const getISOWeek = require('date-fns/get_iso_week')
-const datetime = require("../helpers/datetime");
+const datetime = require('../helpers/datetime')
 
 module.exports = class Timestamp {
-  constructor(data) {
+  constructor (data) {
     this.data = this.constructor._format(data)
 
-    for (let field_name in this.data) {
-      Object.defineProperty(this, field_name, {
+    for (let field in this.data) {
+      Object.defineProperty(this, field, {
         get: function () {
-          console.log('** getter', field_name);
-          return this.data[field_name];
+          console.log('** getter', field)
+          return this.data[field]
         },
 
-        set: function (new_value) {
-          console.log('** setter', field_name, new_value);
-          this.data[field_name] = new_value;
-          this.data['modified'] = (new Date()).getTime();
+        set: function (value) {
+          console.log('** setter', field, value)
+          this.data[field] = value
+          this.data['modified'] = (new Date()).getTime()
         }
       })
     }
   }
 
   // FIXME: Check if Object.keys(data).includes?(['start', 'pause', 'end'])
-  static _calculateDuration(data) {
+  static _calculateDuration (data) {
     console.log('*** duration', data)
     const start = datetime.timeToNumber(data.start)
     const pause = datetime.timeToNumber(data.pause)
@@ -30,7 +30,7 @@ module.exports = class Timestamp {
     return end - (start + pause)
   }
 
-  static _format(data) {
+  static _format (data) {
     console.log('*** format', data)
     const date = new Date(data.timestamp)
     const duration = this._calculateDuration(data)

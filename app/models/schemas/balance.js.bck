@@ -1,0 +1,34 @@
+// const dynamoose = require('dynamoose');
+const Schema = require('dynamoose').Schema
+
+module.exports = new Schema({
+  user_id: {
+    type: String,
+    hashKey: true
+  },
+
+  total: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+
+  vacation: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+
+  sickeness: {
+    type: Number,
+    required: true,
+    default: 0
+  }
+},
+{
+  throughput: {
+    read: 1,
+    write: 1,
+    timestamps: true
+  }
+})

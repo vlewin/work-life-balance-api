@@ -1,0 +1,128 @@
+service: work-life-balance-api
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: development
+  region: eu-central-1
+  profile: vlewin
+  cfLogs: true
+  memorySize: 128
+  timeout: 5
+
+  usagePlan:
+    quota:
+      limit: 1000
+      offset: 2
+      period: WEEK
+    throttle:
+      burstLimit: 20
+      rateLimit: 10
+
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    RECORDS_TABLE: "records-${opt:stage, self:provider.stage}"
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:CreateTable
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:BatchWriteItem
+
+      Resource: "*"
+      # Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.RECORDS_TABLE}"
+
+plugins:
+  - serverless-offline
+  # - serverless-plugin-stage-variables
+
+package:
+  excludeDevDependencies: true
+  include:
+    - app/**
+    - node_modules/**
+  exclude:
+    - ./**
+    - node_modules/.bin/**
+
+
+  # include:
+  #  - dist/**
+  # exclude:
+  #   - .*
+  #   - package.json
+  #   - package-lock.json
+  #   - yarn.lock
+  #   - README.md
+  #   - node_modules/.bin/**
+  #   - playground/**
+
+
+# TODO: Microservices Pattern vs Services Pattern
+# https://serverless.com/blog/serverless-architecture-code-patterns/#4-the-graph-pattern
+
+functions:
+  authorizer:
+    handler: app/authorizer/index.handler
+
+  logger:
+    handler: app/controllers/logger.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn: { Fn::GetAtt: [ RecordsDynamoTable, StreamArn ] }
+          batchSize: 1
+                    
+  index:
+    handler: app/controllers/records.index
+    description: Display all time record information.
+    events:
+      - http:
+          authorizer: authorizer
+          path: records
+          method: get
+          cors: true
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+
+  create:
+    handler: app/controllers/records.create
+    description: Create time record.
+    events:
+      - http:
+          authorizer: authorizer
+          path: records
+          method: post
+          cors: true
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+
+resources:
+  Resources:
+    RecordsDynamoTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Delete
+
+      Properties:
+        TableName: ${self:provider.environment.RECORDS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: user_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user_id
+            KeyType: HASH        
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1        
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
