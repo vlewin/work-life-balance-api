@@ -57,7 +57,7 @@ describe('Records controller', () => {
 
   describe('#create', () => {
     describe('Valid parameters', () => {
-      it.only('Creates record and returns 200 status code', async () => {
+      it('Creates record and returns 200 status code', async () => {
         event.body = { user_id: 'auth0|12345', date: '01.01.2018', month: '1', week: '1' }
 
         const callback = jest.fn((_, response) => {

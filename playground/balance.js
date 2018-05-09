@@ -13,9 +13,5 @@ const balance = {
 // console.log(params)
 //
 // let response = Balance.update(params)
-//
-// Balance.findById('github|611466')
 
-
-const LambdaHelper = require('../app/helpers/lambda')
-console.log(LambdaHelper.headers)
+Balance.findById('github|611466')

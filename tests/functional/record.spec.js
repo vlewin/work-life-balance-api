@@ -14,7 +14,7 @@ beforeAll(() => {
 })
 
 describe('#index()', () => {
-  it.only('Returns 422 with missing requried params message if no parameters', async () => {
+  it('Returns 422 with missing requried params message if no parameters', async () => {
     // request({ url: 'http://localhost:3000/records', json: true }, (error, response, body) => {
     //   console.log(error, response)
     // })

@@ -44,14 +44,37 @@ const absence = [
     "type": "absence",
     "reason": "sickness",
     "duration": "8"
+  },
+
+  {
+    "user_id": 'github|611466',
+    "timestamp": new Date("2018-02-08T19:05:39.735Z").getTime(),
+    "date": new Date("2018-02-08T19:05:39.735Z").toDateString(),
+    "type": "absence",
+    "reason": "sickness",
+    "duration": "8"
   }
 
 ]
 
-Record.create(absence)
+// Record.create(absence)
 
 // for(timestamp of absence) {
 //   let params = Validator.validate(timestamp, 'create_absence')
 //   let record = Record.create(params)
 //   record.save()
 // }
+
+
+const date = {
+  "user_id": 'github|611466',
+  "timestamp": new Date("2018-02-08T19:05:39.735Z").getTime(),
+  "date": new Date("2018-02-08T19:05:39.735Z").toDateString(),
+  "type": "absence",
+  "reason": "sickness",
+  "duration": "8"
+}
+
+let params = Validator.validate(date, 'create_absence')
+let record = new Record(params)
+record.save()
