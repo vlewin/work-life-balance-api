@@ -51,6 +51,23 @@ const timestamps = [
     "pause": "00:30",
     "end": "18:00",
     "duration": "8.5"
+  },
+
+  {
+    "user_id": 'github|611466',
+    "timestamp": new Date("2018-01-04T19:05:39.735Z").getTime(),
+    "date": "2018-01-04T19:05:39.735Z",
+    "type": "absence",
+    "reason": "vacation",
+    "duration": "8"
+  },
+  {
+    "user_id": 'github|611466',
+    "timestamp": new Date("2018-01-05T19:05:39.735Z").getTime(),
+    "date": "2018-01-05T19:05:39.735Z",
+    "type": "absence",
+    "reason": "vacation",
+    "duration": "8"
   }
 
 ]

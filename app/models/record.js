@@ -9,7 +9,7 @@ module.exports = class Record extends Timestamp {
   }
 
   static get connection () {
-    return dynamoose.model(process.env.RECORDS_TABLE || 'records-development', schema, { update: true })
+    return dynamoose.model(process.env.RECORDS_TABLE || 'records-development', schema, { update: false })
   }
 
   static async findById (userId) {
@@ -29,11 +29,17 @@ module.exports = class Record extends Timestamp {
     // return response
 
     const range = datetime.getStartEndByMonth(month)
+    // const response = await this.connection.query({
+    //   user_id: { eq: userId }
+    // }).where({
+    //   type: { eq: 'presence' }
+    // }).filter('timestamp').between(range[0], range[1]).exec()
+    //
+    // return response
+
     const response = await this.connection.query({
       user_id: { eq: userId }
-    }).where({
-      type: { eq: 'presence' }
-    }).filter('timestamp').between(range[0], range[1]).exec()
+    }).where('timestamp').between(range[0], range[1]).exec()
 
     return response
   }
@@ -45,12 +51,11 @@ module.exports = class Record extends Timestamp {
     // }).where({
     //   week: { eq: week }
     // }).exec()
+
     const range = datetime.getStartEndByWeek(week)
     const response = await this.connection.query({
       user_id: { eq: userId }
-    }).where({
-      type: { eq: 'presence' }
-    }).filter('timestamp').between(range[0], range[1]).exec()
+    }).where('timestamp').between(range[0], range[1]).filter('type').eq('presence').exec()
 
     return response
   }

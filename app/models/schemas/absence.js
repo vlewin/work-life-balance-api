@@ -29,7 +29,7 @@ module.exports = new Schema({
   reason: {
     type: String,
     required: false,
-    validate: (v) => ['vacation', 'sickeness', 'holiday'].includes(v)
+    validate: (v) => ['vacation', 'sickness', 'holiday'].includes(v)
   },
 
   date: {
@@ -42,7 +42,7 @@ module.exports = new Schema({
     required: false,
     default: 8.5
 
-    // validate: (v) => ['vacation', 'sickeness', 'holiday'].includes(v)
+    // validate: (v) => ['vacation', 'sickness', 'holiday'].includes(v)
   },
 },
 {

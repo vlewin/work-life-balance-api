@@ -1,10 +1,10 @@
 Resources:
   RecordsDynamoDbTable:
     Type: 'AWS::DynamoDB::Table'
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain
     Properties:
       TableName: ${self:provider.environment.RECORDS_TABLE}
-      
+
       # NOTE: A list of AttributeName and AttributeType objects that describe the key schema for the table and indexes.
       AttributeDefinitions:
         -
@@ -13,6 +13,9 @@ Resources:
         -
           AttributeName: timestamp
           AttributeType: N
+        # -
+        #   AttributeName: date
+        #   AttributeType: S
         -
           AttributeName: type
           AttributeType: S
@@ -28,6 +31,15 @@ Resources:
           KeyType: RANGE
 
       LocalSecondaryIndexes:
+      # - IndexName: TimestampLSI
+      #   KeySchema:
+      #   - AttributeName: user_id
+      #     KeyType: HASH
+      #   - AttributeName: timestamp
+      #     KeyType: RANGE
+      #   Projection:
+      #     ProjectionType: ALL
+
       - IndexName: TypeLSI
         KeySchema:
         - AttributeName: user_id

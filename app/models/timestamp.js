@@ -21,9 +21,12 @@ module.exports = class Timestamp {
     }
   }
 
-  // FIXME: Check if Object.keys(data).includes?(['start', 'pause', 'end'])
   static _calculateDuration (data) {
     console.log('*** duration', data)
+    if(data.duration) {
+      return data.duration
+    }
+
     const start = datetime.timeToNumber(data.start)
     const pause = datetime.timeToNumber(data.pause)
     const end = datetime.timeToNumber(data.end)

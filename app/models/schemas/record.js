@@ -16,19 +16,34 @@ module.exports = new Schema({
     type: String,
     required: false,
     default: 'presence',
-    validate: (v) => ['absence', 'presence'].includes(v)
+    validate: (v) => ['absence', 'presence'].includes(v),
+    index: {
+      global: false,
+      hashKey: 'user_id',
+      name: 'TypeLSI',
+      project: true, // ProjectionType: ALL
+      throughput: 1 // read and write are both 5
+    }
   },
 
   reason: {
     type: String,
     required: false,
     default: null,
-    validate: (v) => ['vacation', 'sickeness', 'holiday', null].includes(v)
+    validate: (v) => ['vacation', 'sickness', 'holiday', null].includes(v),
+    index: {
+      global: false,
+      hashKey: 'user_id',
+      name: 'ReasonLSI',
+      project: true, // ProjectionType: ALL
+      throughput: 1 // read and write are both 5
+    }
   },
 
   date: {
     type: String,
-    required: true
+    required: true,
+    rangeKey: true
   },
 
   start: String,

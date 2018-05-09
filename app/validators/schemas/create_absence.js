@@ -5,9 +5,6 @@ module.exports = {
     "timestamp": { "type": "number" },
     // "date": { "type": "string", format: 'date-time' },
     "date": { "type": "string" },
-    "start": { "type": "string" },
-    "pause": { "type": "string" },
-    "end": { "type": "string" },
     "duration": { "type": "number" },
     "reason": {
       "enum": [ "vacation","sickness", "holidy", "" ]
@@ -17,5 +14,5 @@ module.exports = {
       "enum": [ "absence","presence" ], "default": "presence"
     }
   },
-  "required": [ "user_id", "timestamp", "start", "pause", "end" ]
+  "required": [ "user_id", "timestamp", "type", "reason" ]
 }
