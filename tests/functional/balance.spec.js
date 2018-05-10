@@ -1,41 +1,56 @@
-import balanceController from '../../../app/controllers/balance'
+const axios = require('axios');
+const seed = require('../seeds/balance')
+const Streams = require('../fixtures/streams')
 
-import Balance from '../../../app/models/balance'
-import Streams from '../../fixtures/streams'
+beforeAll(async () => {
+  await seed.import()
 
-jest.mock('../../../app/models/balance')
+  axios.interceptors.request.use((config) => {
+    // Do something before request is sent
+    config.headers = { 'Authorization': 'TEST-TOKEN' }
+    return config
 
-describe('Records controller', () => {
-  const event = {}
-  const context = {}
-
-  describe('#update', () => {
-    describe('Presence type', () => {
-      describe('Insert event', () => {
-        it('Updates total balance and return 200 status code', async () => {
-          const callback = jest.fn((_, response) => {
-            expect(response.statusCode).toBe(200)
-          })
-
-          await balanceController.update(Streams.insertPresence, context, callback)
-
-          expect(Balance.update).toHaveBeenLastCalledWith({})
-        })
-      })
-    })
+  }, (error) => {
+    // Do something with request error
+    return Promise.reject(error)
   })
+})
 
-  // describe('#create', () => {
-  //   describe('Valid parameters', () => {
-  //     it.only('Creates record and returns 200 status code', async () => {
-  //       event.body = { user_id: 'auth0|12345', date: '01.01.2018', month: '1', week: '1' }
-  //
-  //       const callback = jest.fn((_, response) => {
-  //         expect(response.statusCode).toBe(200)
-  //       })
-  //
-  //       await recordsController.create(event, context, callback)
-  //     })
-  //   })
+describe('#show()', () => {
+  // it('Returns 422 with missing requried params message if no parameters', async () => {
+  //   // request({ url: 'http://localhost:3000/records', json: true }, (error, response, body) => {
+  //   //   console.log(error, response)
+  //   // })
+  //   console.log('***** ')
+  //   const reponse = await axios.get('http://localhost:3000/records?week=18')
+  //   console.log(reponse)
   // })
+
+  it.only('Returns 200 with balance as a JSON response for given user', async () => {
+    console.log('*** Test exec')
+    const reponse = await axios.get('http://localhost:3000/balance/user12345')
+    console.log(reponse.data)
+
+    expect(reponse.data).toEqual({ user_id: 'user12345', total: 0, vacation: 0, sickness: 0 })
+  })
+})
+
+
+describe('#update()', () => {
+  // it('Returns 422 with missing requried params message if no parameters', async () => {
+  //   // request({ url: 'http://localhost:3000/records', json: true }, (error, response, body) => {
+  //   //   console.log(error, response)
+  //   // })
+  //   console.log('***** ')
+  //   const reponse = await axios.get('http://localhost:3000/records?week=18')
+  //   console.log(reponse)
+  // })
+
+  it.only('Returns 200 with balance as a JSON response for given user', async () => {
+    console.log('*** Test exec')
+    const reponse = await axios.get('http://localhost:3000/balance/user12345')
+    console.log(reponse.data)
+
+    expect(reponse.data).toEqual({ user_id: 'user12345', total: 0, vacation: 0, sickness: 0 })
+  })
 })

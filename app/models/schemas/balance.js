@@ -3,7 +3,8 @@ const Schema = require('dynamoose').Schema
 module.exports = new Schema({
   user_id: {
     type: String,
-    hashKey: true
+    hashKey: true,
+    required: true
   },
 
   total: {

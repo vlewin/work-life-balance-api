@@ -1,12 +1,12 @@
 {
   "scripts": {
     "start": "serverless offline start -s development",
+    "jest": "NODE_ENV=test jest --bail --watch",
+    "test": "NODE_ENV=test jest ./tests",
+    "test:functional": "NODE_ENV=test jest ./tests/functional",
+    "test:watch": "NODE_ENV=test jest ./tests --watch",
     "package": "yarn run transpile; sls package -v",
-    "deploy": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s development; yarn",
-    "jest": "jest --bail --watch",
-    "test": "jest ./tests",
-    "test:functional": "jest ./tests/functional",
-    "test:watch": "jest ./tests --watch"
+    "deploy": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s development; yarn"
   },
   "dependencies": {
     "ajv": "^6.4.0",
@@ -16,7 +16,8 @@
     "jjve": "^0.5.2",
     "jsonwebtoken": "^8.2.1",
     "jwk-to-pem": "^2.0.0",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "serverless-offline": "^3.20.0"
   },
   "devDependencies": {
     "axios": "^0.18.0",
@@ -32,8 +33,6 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
-    "jest": "^22.4.3",
-    "serverless-dynamodb-local": "^0.2.30",
-    "serverless-offline": "^3.20.0"
+    "jest": "^22.4.3"
   }
 }

@@ -39,20 +39,26 @@ module.exports.handler = (event, context, callback) => {
   console.log('**** Context ****')
   console.log(context)
 
+  console.log('**** NODE_ENV ****')
+  console.log(process.env.NODE_ENV)
+
+  if(event.authorizationToken === 'TEST-TOKEN' && process.env.IS_OFFLINE) {
+    callback(null, generatePolicy('user12345', 'Allow', event.methodArn))
+    return true
+  }
+
   const iss = 'https://work-life-balance.eu.auth0.com/'
 
   if (event.authorizationToken) {
     console.log('**** FOUND AUTH TOKEN ****')
-    // Remove 'bearer ' from token:
-    // const token = event.authorizationToken.substring(7)
     const token = event.authorizationToken.replace('Bearer ', '')
-    // console.log(token)
 
     // Make a request to the iss + .well-known/jwks.json URL:
     request({ url: `${iss}.well-known/jwks.json`, json: true }, (error, response, body) => {
       if (error || response.statusCode !== 200) {
         console.log('Request error:', error)
         callback('Unauthorized')
+        return true
       }
 
       const keys = body

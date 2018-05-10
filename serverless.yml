@@ -14,9 +14,10 @@ provider:
   timeout: 5
 
   environment:
-    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    # DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
     RECORDS_TABLE: "records-${opt:stage, self:provider.stage}"
     BALANCE_TABLE: "balance-${opt:stage, self:provider.stage}"
+    NODE_ENV: ${opt:stage, self:provider.stage}
 
   iamRoleStatements:
     - Effect: Allow
@@ -38,7 +39,7 @@ provider:
       # Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 plugins:
-  # - serverless-offline
+  - serverless-offline
   # - serverless-plugin-stage-variables
 
 package:
@@ -86,8 +87,12 @@ functions:
     events:
       - http:
           authorizer: authorizer
-          path: balance
+          path: balance/{id}
           method: get
+          request:
+            parameters:
+              paths:
+                id: true
           cors: true
           headers:
             - Content-Type

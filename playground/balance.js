@@ -9,9 +9,9 @@ const balance = {
 }
 
 
-// const params = Validator.validate(balance, 'update_balance')
-// console.log(params)
-//
-// let response = Balance.update(params)
+const params = Validator.validate(balance, 'update_balance')
+console.log(params)
+
+let response = Balance.update(params)
 
 Balance.findById('github|611466')
