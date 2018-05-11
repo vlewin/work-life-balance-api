@@ -30,20 +30,5 @@ module.exports = class Balance {
 
       console.log('*** Balance.update() - response', response)
       return response
-
-    // if (Array.isArray(params)) {
-    //   console.log('*** Balance.batchPut', params)
-    //   const response = await this.model.batchPut(params)
-    //   console.log('*** Returns', JSON.stringify(response))
-    //   return response
-    // } else {
-    //   console.log('*** balance.save', new this.model(params).save())
-    //   new this.model(params).save().then((a,b) => {
-    //     console.log(a,b)
-    //   })
-    //   // const response = await new this.model(params).save()
-    //   console.log('*** Returns', JSON.stringify({}))
-    //   return {}
-    // }
   }
 }

@@ -9,6 +9,7 @@ module.exports = {
   show: async function (event, context, callback) {
     try {
       const params = Lambda.params(event)
+      // FIXME: Move to lambda helpers
       const user_id = querystring.escape(event.pathParameters.id)
       console.info('**** Get balance for UserID', user_id, params)
 

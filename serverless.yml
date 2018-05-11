@@ -65,28 +65,6 @@ functions:
   authorizer:
     handler: app/authorizer/index.handler
 
-  # test:
-  #   handler: app/controllers/test.index
-  #   description: Test custom auth0 authorizer.
-  #   events:
-  #     - http:
-  #         authorizer: authorizer
-  #         path: test
-  #         method: get
-  #         cors: true
-  #         headers:
-  #           - Content-Type
-  #           - X-Amz-Date
-  #           - Authorization
-
-  # logger:
-  #   handler: app/controllers/logger.handler
-  #   events:
-  #     - stream:
-  #         type: dynamodb
-  #         arn: { Fn::GetAtt: [ RecordsDynamoDbTable, StreamArn ] }
-  #         batchSize: 1
-
   BalanceShow:
     handler: app/controllers/balance.show
     description: Get balance.
@@ -95,11 +73,11 @@ functions:
           authorizer: authorizer
           path: balance/{id}
           method: get
+          cors: true
           request:
             parameters:
               paths:
                 id: true
-          cors: true
 
 
   BalanceUpdate:
@@ -114,20 +92,17 @@ functions:
           enabled: true
 
 
-  records_index:
+  RecordsIndex:
     handler: app/controllers/records.index
-    description: Display all time record information.
+    description: Get all time record information.
     events:
       - http:
           authorizer: authorizer
           path: records
           method: get
           cors: true
-          headers:
-            - Content-Type
-            - Authorization
 
-  records_create:
+  RecordsCreate:
     handler: app/controllers/records.create
     description: Create time record.
     events:
@@ -136,9 +111,27 @@ functions:
           path: records
           method: post
           cors: true
-          headers:
-            - Content-Type
-            - Authorization
+
+
+  AbsencesIndex:
+    handler: app/controllers/absences.index
+    description: Get all absence records.
+    events:
+      - http:
+          authorizer: authorizer
+          path: absences
+          method: get
+          cors: true
+
+  AbsencesCreate:
+    handler: app/controllers/absences.create
+    description: Create absence record.
+    events:
+      - http:
+          authorizer: authorizer
+          path: absences
+          method: post
+          cors: true
 
 resources:
    - ${file(resources/records_table.yml)}

@@ -1,8 +1,10 @@
-const getISOWeek = require('date-fns/get_iso_week')
 const datetime = require('../helpers/datetime')
+const Base = require('./base')
 
-module.exports = class Timestamp {
+module.exports = class Timestamp extends Base {
   constructor (data) {
+    super(data)
+
     this.data = this.constructor._format(data)
 
     for (let field in this.data) {
