@@ -15,7 +15,7 @@ module.exports = class Balance {
 
     const response = await this.connection.get({ user_id: userId })
     console.log('*** Returns', JSON.stringify(response))
-    return response
+    return response || { user_id: userId, total: 0, sickness: 0, vacation: 0 }
   }
 
   static async update (params = []) {

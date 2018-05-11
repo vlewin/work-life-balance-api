@@ -34,23 +34,3 @@ describe('#show()', () => {
     expect(reponse.data).toEqual({ user_id: 'user12345', total: 0, vacation: 0, sickness: 0 })
   })
 })
-
-
-describe('#update()', () => {
-  // it('Returns 422 with missing requried params message if no parameters', async () => {
-  //   // request({ url: 'http://localhost:3000/records', json: true }, (error, response, body) => {
-  //   //   console.log(error, response)
-  //   // })
-  //   console.log('***** ')
-  //   const reponse = await axios.get('http://localhost:3000/records?week=18')
-  //   console.log(reponse)
-  // })
-
-  it.only('Returns 200 with balance as a JSON response for given user', async () => {
-    console.log('*** Test exec')
-    const reponse = await axios.get('http://localhost:3000/balance/user12345')
-    console.log(reponse.data)
-
-    expect(reponse.data).toEqual({ user_id: 'user12345', total: 0, vacation: 0, sickness: 0 })
-  })
-})

@@ -6,20 +6,70 @@ import Streams from '../../fixtures/streams'
 jest.mock('../../../app/models/balance')
 
 describe('Records controller', () => {
-  const context = {}
-  const callback = () => {}
+  const user_id = 'user12345'
+  beforeEach(async () => {
+    Balance.findById.mockReturnValue(Object.assign({}, { user_id: user_id, total: 0, sickness: 0, vacation: 0 }))
+  })
 
   describe('#update', () => {
-    describe('Presence', () => {
-      it.only('Updates total balance and return 200 status code', async () => {
-        Balance.findById.mockReturnValue({ total: 0 })
+    describe.skip('Absence', () => {
+      it('Updates sickness count', async () => {
+        await balanceController.update(Streams.sicknessEvent, {}, () => {})
 
-        const event = Streams.insertPresence
-        await balanceController.update(event, context, callback)
-
-        expect(Balance.findById).toHaveBeenLastCalledWith(event.Records[0].dynamodb['NewImage'].user_id['S'])
-        expect(Balance.update).toHaveBeenLastCalledWith({ total: 0.5 })
+        expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+        expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 1, total: 0, user_id: user_id, vacation: 0 })
       })
+
+      it('Updates vacation count', async () => {
+        await balanceController.update(Streams.vacationEvent, {}, () => {})
+
+        expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+        expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 0, total: 0, user_id: user_id, vacation: 1 })
+      })
+    })
+
+    describe('Presence', () => {
+      describe('INSERT event', () => {
+        it('Increases total count', async () => {
+          await balanceController.update(Streams.insertPresencePlusEvent, {}, () => {})
+
+          expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+          expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 0, total: 0.5, user_id: user_id, vacation: 0 })
+        })
+
+        it('Descreases total count', async () => {
+          await balanceController.update(Streams.insertPresenceMinusEvent, {}, () => {})
+
+          expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+          expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 0, total: -0.5, user_id: user_id, vacation: 0 })
+        })
+      })
+
+      describe('MODIFY event', () => {
+        it('Increases total count', async () => {
+          await balanceController.update(Streams.modifyPresencePlusEvent, {}, () => {})
+
+          expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+          expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 0, total: 0.5, user_id: user_id, vacation: 0 })
+        })
+
+        it('Descreases total count', async () => {
+          await balanceController.update(Streams.modifyPresenceMinusEvent, {}, () => {})
+
+          expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+          expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 0, total: -1, user_id: user_id, vacation: 0 })
+        })
+      })
+
+      describe('REMOVE event', () => {
+        it('Updates total count', async () => {
+          await balanceController.update(Streams.removePresenceEvent, {}, () => {})
+
+          expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+          expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 0, total: -0.5, user_id: user_id, vacation: 0 })
+        })
+      })
+
     })
   })
 })

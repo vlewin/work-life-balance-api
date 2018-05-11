@@ -12,15 +12,13 @@ const request = require('request')
 const generatePolicy = (principalId, effect, resource) => {
   const authResponse = { principalId: principalId }
 
-  console.log('Generate policy for', principalId, effect, resource)
+  // console.log('Generate policy for', principalId, effect, resource)
   if (effect && resource) {
     const statementOne = { Action: 'execute-api:Invoke', Effect: effect, Resource: '*' }
     const policyDocument = { Version: '2012-10-17', Statement: [statementOne] }
     authResponse.policyDocument = policyDocument
   }
 
-  console.log('authResponse')
-  console.log(JSON.stringify(authResponse))
   authResponse.context = { authId: principalId, foo: 'TEST' }
   return authResponse
 }
@@ -34,13 +32,13 @@ const headers = {
 
 // Reusable Authorizer function, set on `authorizer` field in serverless.yml
 module.exports.handler = (event, context, callback) => {
-  console.log('**** Event ****')
-  console.log(event)
-  console.log('**** Context ****')
-  console.log(context)
-
-  console.log('**** NODE_ENV ****')
-  console.log(process.env.NODE_ENV)
+  // console.log('**** Event ****')
+  // console.log(event)
+  // console.log('**** Context ****')
+  // console.log(context)
+  //
+  // console.log('**** NODE_ENV ****')
+  // console.log(process.env.NODE_ENV)
 
   if(event.authorizationToken === 'TEST-TOKEN' && process.env.IS_OFFLINE) {
     callback(null, generatePolicy('user12345', 'Allow', event.methodArn))
@@ -50,7 +48,7 @@ module.exports.handler = (event, context, callback) => {
   const iss = 'https://work-life-balance.eu.auth0.com/'
 
   if (event.authorizationToken) {
-    console.log('**** FOUND AUTH TOKEN ****')
+    // console.log('**** FOUND AUTH TOKEN ****')
     const token = event.authorizationToken.replace('Bearer ', '')
 
     // Make a request to the iss + .well-known/jwks.json URL:
@@ -74,7 +72,7 @@ module.exports.handler = (event, context, callback) => {
       // Verify the token:
       jwk.verify(token, pem, { issuer: iss }, (err, decoded) => {
         if (err) {
-          console.log('**** JWT TOKEN IS INVALID:', err.message)
+          // console.log('**** JWT TOKEN IS INVALID:', err.message)
           callback('Unauthorized')
           // callback('Unauthorized', { statusCode: 403, headers: headers, body: err.message })
         } else {

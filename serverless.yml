@@ -30,6 +30,12 @@ provider:
         - dynamodb:PutItem
         - dynamodb:BatchWriteItem
 
+        # NOTE: Permissions needed for stream
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:DescribeStream
+        - dynamodb:ListStreams
+
       # NOTE: Get logical IDs below where they are provisioned
       Resource:
         - { "Fn::GetAtt": ["RecordsDynamoDbTable", "Arn"] }
@@ -59,29 +65,29 @@ functions:
   authorizer:
     handler: app/authorizer/index.handler
 
-  test:
-    handler: app/controllers/test.index
-    description: Test custom auth0 authorizer.
-    events:
-      - http:
-          authorizer: authorizer
-          path: test
-          method: get
-          cors: true
-          headers:
-            - Content-Type
-            - X-Amz-Date
-            - Authorization
+  # test:
+  #   handler: app/controllers/test.index
+  #   description: Test custom auth0 authorizer.
+  #   events:
+  #     - http:
+  #         authorizer: authorizer
+  #         path: test
+  #         method: get
+  #         cors: true
+  #         headers:
+  #           - Content-Type
+  #           - X-Amz-Date
+  #           - Authorization
 
-  logger:
-    handler: app/controllers/logger.handler
-    events:
-      - stream:
-          type: dynamodb
-          arn: { Fn::GetAtt: [ RecordsDynamoDbTable, StreamArn ] }
-          batchSize: 1
+  # logger:
+  #   handler: app/controllers/logger.handler
+  #   events:
+  #     - stream:
+  #         type: dynamodb
+  #         arn: { Fn::GetAtt: [ RecordsDynamoDbTable, StreamArn ] }
+  #         batchSize: 1
 
-  balance_show:
+  BalanceShow:
     handler: app/controllers/balance.show
     description: Get balance.
     events:
@@ -94,27 +100,19 @@ functions:
               paths:
                 id: true
           cors: true
-          headers:
-            - Content-Type
-            - Authorization
 
-  balance_update:
+
+  BalanceUpdate:
     handler: app/controllers/balance.update
     description: Update balance.
     events:
-      # - http:
-      #     authorizer: authorizer
-      #     path: balance
-      #     method: put
-      #     cors: true
-      #     headers:
-      #       - Content-Type
-      #       - Authorization
-
       - stream:
           type: dynamodb
           arn: { Fn::GetAtt: [ RecordsDynamoDbTable, StreamArn ] }
+          startingPosition: LATEST
           batchSize: 1
+          enabled: true
+
 
   records_index:
     handler: app/controllers/records.index

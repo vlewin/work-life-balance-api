@@ -3,6 +3,8 @@ const Validator = require('../validators/schema')
 const Lambda = require('../helpers/lambda')
 const querystring = require('querystring');
 
+
+
 module.exports = {
   show: async function (event, context, callback) {
     try {
@@ -20,62 +22,59 @@ module.exports = {
     }
   },
 
-  update: async function (event, context, callback) {
-    try {
-      console.log(event)
-
-      console.log('*********** START EVENT JSON ***********')
-
-      console.log(JSON.stringify(event))
-
-      console.log('*********** END EVENT JSON ***********')
-
-      // FIXME: Move to Lambda helpers streamEvent
-      const record = event.Records[0].dynamodb['NewImage']
-      const timestamp = {}
-
-      for(let key of Object.keys(record)) {
-        timestamp[key] = Object.values(record[key])[0]
-      }
-
-      console.log('*********** START TIMESTAMP ***********')
-      console.log(timestamp)
-      console.log('*********** END TIMESTAMP ***********')
+  update: async (event, context, callback) => {
+    console.log('*********** START EVENT JSON ***********')
+    console.log(JSON.stringify(event.Records[0].dynamodb['OldImage']))
+    console.log('*********** END EVENT JSON ***********')
 
 
-      console.log('*********** START BALANCE ***********')
-      let balance = await Balance.findById(timestamp.user_id)
-      console.log('*********** END BALANCE ***********')
+    if(event && event.Records){
+      const user_id = Lambda.convertStreamData(event.Records[0].dynamodb['Keys']).user_id
+      let balance = await Balance.findById(user_id) || {}
 
+      event.Records.forEach((record) => {
+        console.log(user_id, record.eventName)
+        if(record.eventName === 'INSERT') {
+          const timestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
 
-      if(!balance) {
-        console.log('*** Init balance')
-        balance = { total: 0, vacation: 0, sickness: 0 }
-      }
+          if(timestamp.type === 'presence') {
+            balance.total += parseFloat(timestamp.total)
+          } else {
+            // balance[new_timestamp.reason] += 1
+          }
 
-      console.log('*********** UPDATE BALANCE ***********')
-      balance.total += parseFloat(timestamp.duration) - 8
-      console.log('Update total', balance)
+        } else if (record.eventName === 'MODIFY') {
+          const new_timestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
+          const old_timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
+
+          if(new_timestamp.type === 'presence') {
+            balance.total += parseFloat(new_timestamp.total) - parseFloat(old_timestamp.total)
+          } else {
+            // balance[new_timestamp.reason] += 1
+          }
+        } else if (record.eventName === 'REMOVE') {
+          const timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
+
+          if(timestamp.type === 'presence') {
+            balance.total -= parseFloat(timestamp.total)
+          } else {
+            // balance[new_timestamp.reason] += 1
+          }
+
+        } else {
+          // Should never happen
+          console.log('ERROR: Unknown event')
+        }
+      })
+
+      console.log(balance)
 
       const params = Validator.validate(balance, 'update_balance')
+      await Balance.update(params)
 
-      console.log('*** Update balance', params)
-      const response = await Balance.update(params)
-      console.log('*********** END BALANCE ***********')
-
-      console.log('*********** START REPONSE ***********')
-      console.log(typeof(response))
-
-      console.log(response)
-
-      console.info('**** RESPONSE', JSON.stringify(response))
-      console.log('*********** END REPONSE ***********')
-      // callback(null, { statusCode: 200, body: JSON.stringify(response), headers: Lambda.headers })
-
-    } catch (error) {
-      // FIXME: How to notify user about an exception in a balance update flow ???
-      console.error('**** ERROR', JSON.stringify(error))
-      callback(null, { statusCode: 422, body: error.message, headers: Lambda.headers })
+    } else {
+      // Should never happen
+      console.log('ERROR: No records')
     }
   }
 }

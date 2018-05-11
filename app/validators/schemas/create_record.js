@@ -3,12 +3,12 @@ module.exports = {
   "properties": {
     "user_id": { "type": "string" },
     "timestamp": { "type": "number" },
-    // "date": { "type": "string", format: 'date-time' },
     "date": { "type": "string" },
     "start": { "type": "string" },
     "pause": { "type": "string" },
     "end": { "type": "string" },
     "duration": { "type": "number" },
+    "total": { "type": "number" },
     "reason": {
       "enum": [ "vacation","sickness", "holidy", "" ]
     },

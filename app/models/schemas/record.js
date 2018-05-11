@@ -49,7 +49,8 @@ module.exports = new Schema({
   start: String,
   pause: String,
   end: String,
-  duration: Number
+  duration: Number,
+  total: Number
 },
 {
   throughput: {read: 1, write: 1}

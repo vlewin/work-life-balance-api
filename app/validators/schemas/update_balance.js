@@ -6,5 +6,5 @@ module.exports = {
     "vacation": { "type": "number" },
     "sickness": { "type": "number" }
   },
-  "required": [ "user_id" ]
+  "required": [ "user_id"  ]
 }

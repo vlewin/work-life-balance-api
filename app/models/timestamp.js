@@ -36,14 +36,14 @@ module.exports = class Timestamp {
   static _format (data) {
     console.log('*** format', data)
     const date = new Date(data.timestamp)
+    // console.log('*** Date from timestamp', date)
     const duration = this._calculateDuration(data)
     return {
       ...data,
       ...{
-        date: date.toDateString(),
-        // month: date.getMonth() + 1, // Index starts with 0
-        // week: getISOWeek(date),
-        duration: duration
+        // date: date.toDateString(),
+        duration: duration,
+        total: duration - 8
       }
     }
   }

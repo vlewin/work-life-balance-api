@@ -17,5 +17,14 @@ module.exports = {
       const body = typeof (event.body) === 'string' ? JSON.parse(event.body) : event.body
       return Object.assign(params, body)
     }
+  },
+
+  convertStreamData: (data) => {
+    const object = { }
+    for(let key of Object.keys(data)) {
+      object[key] = Object.values(data[key])[0]
+    }
+
+    return object
   }
 }
