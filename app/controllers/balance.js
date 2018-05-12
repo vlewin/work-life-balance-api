@@ -25,57 +25,63 @@ module.exports = {
 
   update: async (event, context, callback) => {
     console.log('*********** START EVENT JSON ***********')
-    console.log(JSON.stringify(event.Records[0].dynamodb['OldImage']))
+    console.log(JSON.stringify(event))
     console.log('*********** END EVENT JSON ***********')
 
+    try {
+      if(event && event.Records){
+        const user_id = Lambda.convertStreamData(event.Records[0].dynamodb['Keys']).user_id
+        let balance = await Balance.findById(user_id) || {}
 
-    if(event && event.Records){
-      const user_id = Lambda.convertStreamData(event.Records[0].dynamodb['Keys']).user_id
-      let balance = await Balance.findById(user_id) || {}
+        event.Records.forEach((record) => {
+          console.log(user_id, record.eventName)
+          if(record.eventName === 'INSERT') {
+            const timestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
 
-      event.Records.forEach((record) => {
-        console.log(user_id, record.eventName)
-        if(record.eventName === 'INSERT') {
-          const timestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
+            if(timestamp.type === 'presence') {
+              balance.total += parseFloat(timestamp.total)
+            } else {
+              balance[timestamp.reason] += 1
+            }
 
-          if(timestamp.type === 'presence') {
-            balance.total += parseFloat(timestamp.total)
+          } else if (record.eventName === 'MODIFY') {
+            const new_timestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
+            const old_timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
+
+            if(new_timestamp.type === 'presence') {
+              // FIXME: Why I get no total in event payload?
+              let new_total = parseFloat(new_timestamp.duration) || 0
+              let old_total = parseFloat(old_timestamp.duration) || 0
+
+              balance.total += new_total - old_total
+            } else {
+              // balance[new_timestamp.reason] += 1
+            }
+          } else if (record.eventName === 'REMOVE') {
+            const timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
+
+            if(timestamp.type === 'presence') {
+              // FIXME: Why I get no total in event payload?
+              balance.total -= parseFloat(timestamp.total) || 0
+            } else {
+              // balance[new_timestamp.reason] += 1
+            }
+
           } else {
-            // balance[new_timestamp.reason] += 1
+            // Should never happen
+            console.log('ERROR: Unknown event')
           }
+        })
 
-        } else if (record.eventName === 'MODIFY') {
-          const new_timestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
-          const old_timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
+        const params = Validator.validate(balance, 'update_balance')
+        await Balance.update(params)
 
-          if(new_timestamp.type === 'presence') {
-            balance.total += parseFloat(new_timestamp.total) - parseFloat(old_timestamp.total)
-          } else {
-            // balance[new_timestamp.reason] += 1
-          }
-        } else if (record.eventName === 'REMOVE') {
-          const timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
-
-          if(timestamp.type === 'presence') {
-            balance.total -= parseFloat(timestamp.total)
-          } else {
-            // balance[new_timestamp.reason] += 1
-          }
-
-        } else {
-          // Should never happen
-          console.log('ERROR: Unknown event')
-        }
-      })
-
-      console.log(balance)
-
-      const params = Validator.validate(balance, 'update_balance')
-      await Balance.update(params)
-
-    } else {
-      // Should never happen
-      console.log('ERROR: No records')
+      } else {
+        // Should never happen
+        console.log('ERROR: No records')
+      }
+    } catch(error) {
+      console.log('ERROR:', error)
     }
   }
 }

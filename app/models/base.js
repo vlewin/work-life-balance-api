@@ -3,6 +3,12 @@ const schema = require('./schemas/record')
 const datetime = require("../helpers/datetime");
 
 module.exports = class Base {
+  constructor (data) {
+    console.log('**** BASE CONSTRUCTOR')
+
+    this.data = data
+  }
+
   static get connection () {
     return dynamoose.model(process.env.RECORDS_TABLE || 'records-development', schema, { update: false })
   }
@@ -19,9 +25,9 @@ module.exports = class Base {
     console.log('===================================')
     console.log('findByMonth', userId, month)
     const range = datetime.getStartEndByMonth(month)
-    const response = await this.connection.query({
-      user_id: { eq: userId }
-    }).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type).exec()
+
+    const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type)
+    const response = await query.exec()
 
     console.log('===================================')
     return response
@@ -31,9 +37,12 @@ module.exports = class Base {
     console.log('===================================')
     console.log('findByWeek', userId, week)
     const range = datetime.getStartEndByWeek(week)
-    const response = await this.connection.query({
-      user_id: { eq: userId }
-    }).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type).exec()
+    // const response = await this.connection.query({
+    //   user_id: { eq: userId }
+    // }).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type).exec()
+
+    const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type)
+    const response = await query.exec()
 
     console.log('===================================')
     return response
@@ -62,17 +71,23 @@ module.exports = class Base {
 
       response = await this.connection.batchPut(params)
     } else {
-      console.log('*** .create() - new save')
-
-      response = await new this.connection(params).save()
+      console.log('*** .create() - init and call save')
+      console.log(params)
+      console.log(this)
+      response = await new this(params).save()
     }
 
+    console.log(response)
     return response
   }
 
   async save() {
     console.log('*** #save()')
-    const response = await this.constructor.create(this.data)
+    console.log('*******')
+    console.log(this.data)
+    console.log('*******')
+
+    const response = await new this.constructor.connection(this.data).save()
     return response
   }
 }

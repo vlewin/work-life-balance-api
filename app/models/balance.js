@@ -28,7 +28,7 @@ module.exports = class Balance {
         response = await new this.connection(params).save()
       }
 
-      console.log('*** Balance.update() - response', response)
+      console.log('*** Balance.update() - response', response.user_id, response.total, response.vacation, response.sickness)
       return response
   }
 }

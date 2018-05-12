@@ -20,7 +20,7 @@ module.exports = {
     try {
       const params = Lambda.params(event)
       const response = await Record.create(Validator.validate(params, 'create_record'))
-      callback(null, { statusCode: 200, body: JSON.stringify({}), headers: Lambda.headers })
+      callback(null, { statusCode: 200, body: JSON.stringify(response), headers: Lambda.headers })
     } catch (error) {
       console.log('ERROR:', error)
       callback(null, { statusCode: 422, body: error.message, headers: Lambda.headers })

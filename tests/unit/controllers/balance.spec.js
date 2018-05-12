@@ -12,19 +12,21 @@ describe('Records controller', () => {
   })
 
   describe('#update', () => {
-    describe.skip('Absence', () => {
-      it('Updates sickness count', async () => {
-        await balanceController.update(Streams.sicknessEvent, {}, () => {})
+    describe('Absence', () => {
+      describe('INSERT event', () => {
+        it('Updates vacation count', async () => {
+          await balanceController.update(Streams.inserAbsenceVacationEvent, {}, () => {})
 
-        expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
-        expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 1, total: 0, user_id: user_id, vacation: 0 })
-      })
+          expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+          expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 0, total: 0, user_id: user_id, vacation: 1 })
+        })
 
-      it('Updates vacation count', async () => {
-        await balanceController.update(Streams.vacationEvent, {}, () => {})
+        it('Updates sickness count', async () => {
+          await balanceController.update(Streams.inserAbsenceSicknessEvent, {}, () => {})
 
-        expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
-        expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 0, total: 0, user_id: user_id, vacation: 1 })
+          expect(Balance.findById).toHaveBeenLastCalledWith(user_id)
+          expect(Balance.update).toHaveBeenLastCalledWith({ sickness: 1, total: 0, user_id: user_id, vacation: 0 })
+        })
       })
     })
 
