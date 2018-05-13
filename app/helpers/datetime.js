@@ -12,7 +12,7 @@ var endOfMonth = require('date-fns/end_of_month')
 module.exports = {
   getStartEndByWeek: (week) => {
     var date = setISOWeek(new Date(), week)
-    date = setHours(date, 0)
+    date = setHours(date, 2)
 
     var start = startOfWeek(date, {weekStartsOn: 1})
     console.log('Start:', start.toLocaleString('DE'))
@@ -24,7 +24,7 @@ module.exports = {
 
   getStartEndByMonth: (month) => {
     var date = setMonth(new Date(), month-1)
-    date = setHours(date, 0)
+    date = setHours(date, 2)
 
     var start = startOfMonth(date, {weekStartsOn: 1})
     console.log('Start:', start.toLocaleString('DE'))

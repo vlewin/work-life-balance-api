@@ -24,6 +24,10 @@ module.exports = class Base {
   static async findByMonth (userId, month) {
     console.log('===================================')
     console.log('findByMonth', userId, month)
+    console.log(process.env.TZ)
+
+    const now = new Date()
+    console.log('TZ', process.env.TZ, 'Offset', now.getTimezoneOffset())
     const range = datetime.getStartEndByMonth(month)
 
     const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type)

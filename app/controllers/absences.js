@@ -6,8 +6,10 @@ const Lambda = require('../helpers/lambda')
 module.exports = {
   index: async function (event, context, callback) {
     try {
+      console.log(process.env.TZ)
       const params = Lambda.params(event)
       const response = await Absence.all(Validator.validate(params, 'index_absence'))
+      console.log(response)
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers: Lambda.headers })
 
     } catch (error) {
@@ -25,7 +27,7 @@ module.exports = {
       const body = JSON.parse(event.body).map((r) => Object.assign(r, { user_id: params.user_id }))
       console.log(body)
       const response = await Absence.create(body)
-      callback(null, { statusCode: 200, body: JSON.stringify({}), headers: Lambda.headers })
+      callback(null, { statusCode: 200, body: JSON.stringify(response), headers: Lambda.headers })
     } catch (error) {
       console.log('ERROR:', error)
       callback(null, { statusCode: 422, body: error.message, headers: Lambda.headers })

@@ -6,6 +6,8 @@ const Lambda = require('../helpers/lambda')
 module.exports = {
   index: async function (event, context, callback) {
     try {
+      console.log(process.env.TZ)
+
       const params = Lambda.params(event)
       const response = await Record.all(Validator.validate(params, 'index_record'))
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers: Lambda.headers })

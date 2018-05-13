@@ -14,7 +14,8 @@ provider:
   timeout: 5
 
   environment:
-    # DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    # FIXME: Workaround for timezone issue: https://github.com/date-fns/date-fns/issues/376
+    TZ: 'Europe/Berlin'
     RECORDS_TABLE: "records-${opt:stage, self:provider.stage}"
     BALANCE_TABLE: "balance-${opt:stage, self:provider.stage}"
     NODE_ENV: ${opt:stage, self:provider.stage}

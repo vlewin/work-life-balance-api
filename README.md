@@ -1,5 +1,8 @@
 # work-life-balance AWS Lambda based API
 
+## KNOWN ISSUES:
+- https://github.com/date-fns/date-fns/issues/376
+
 ## Controllers
 - [AJV plugins](https://github.com/DivineGod/ajv-error-messages)
 - [Rails-style implementation of strong parameters for Node.js](https://www.npmjs.com/package/strong-params)
