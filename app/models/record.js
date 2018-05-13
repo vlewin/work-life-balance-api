@@ -53,7 +53,7 @@ module.exports = class Record extends Base {
     }
   }
 
-  static get type () {
-    return 'presence'
-  }
+  // static get type () {
+  //   return 'presence'
+  // }
 }

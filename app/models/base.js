@@ -16,7 +16,15 @@ module.exports = class Base {
   static async findById (userId) {
     console.log('===================================')
     console.log('findById', userId)
-    const response = await this.connection.query({ user_id: { eq: userId } }).filter('type').eq(this.type).exec()
+    // const response = await this.connection.query({ user_id: { eq: userId } }).filter('type').eq(this.type).exec()
+    const query = this.connection.query('user_id').eq(userId)
+
+    if(this.type) {
+      query.filter('type').eq(this.type)
+    }
+
+    const response = await query.exec()
+
     console.log('===================================')
     return response
   }
@@ -30,7 +38,12 @@ module.exports = class Base {
     console.log('TZ', process.env.TZ, 'Offset', now.getTimezoneOffset())
     const range = datetime.getStartEndByMonth(month)
 
-    const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type)
+    const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1])
+
+    if(this.type) {
+      query.filter('type').eq(this.type)
+    }
+
     const response = await query.exec()
 
     console.log('===================================')
@@ -45,7 +58,12 @@ module.exports = class Base {
     //   user_id: { eq: userId }
     // }).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type).exec()
 
-    const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1]).filter('type').eq(this.type)
+    const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1])
+
+    if(this.type) {
+      query.filter('type').eq(this.type)
+    }
+
     const response = await query.exec()
 
     console.log('===================================')
