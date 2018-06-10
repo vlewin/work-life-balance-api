@@ -113,6 +113,20 @@ functions:
           method: post
           cors: true
 
+  RecordsDelete:
+    handler: app/controllers/records.delete
+    description: Delete time record.
+    events:
+      - http:
+          authorizer: authorizer
+          path: records
+          method: delete
+          cors: true
+      - http:
+          authorizer: authorizer
+          path: records/{id}
+          method: delete
+          cors: true
 
   AbsencesIndex:
     handler: app/controllers/absences.index

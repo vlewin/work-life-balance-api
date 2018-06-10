@@ -42,8 +42,7 @@ module.exports = new Schema({
 
   date: {
     type: String,
-    required: true,
-    rangeKey: true
+    required: false
   },
 
   start: String,

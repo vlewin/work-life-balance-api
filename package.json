@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "serverless offline start -s development",
+    "start": "serverless offline --host 0.0.0.0 start -s development",
     "jest": "NODE_ENV=test jest --bail --watch",
     "test": "NODE_ENV=test jest ./tests",
     "test:functional": "NODE_ENV=test jest ./tests/functional",

@@ -4,7 +4,7 @@ const datetime = require("../helpers/datetime");
 
 module.exports = class Base {
   constructor (data) {
-    console.log('**** BASE CONSTRUCTOR')
+    console.log('**** BASE CONSTRUCTOR', data)
 
     this.data = data
   }
@@ -70,6 +70,21 @@ module.exports = class Base {
     return response
   }
 
+  static async findByTimestamp (userId, timestamp) {
+    // console.log('===================================')
+    // console.log('findByDate', userId, timestamp)
+    const query = this.connection.query('user_id').eq(userId).where('timestamp').eq(timestamp)
+
+    if(this.type) {
+      query.filter('type').eq(this.type)
+    }
+
+    const response = await query.exec()
+
+    // console.log('===================================')
+    return response
+  }
+
   static async all (params = {}) {
     let response = []
 
@@ -103,6 +118,18 @@ module.exports = class Base {
     return response
   }
 
+  static async delete(params = {}) {
+    console.log(params)
+
+    if (Array.isArray(params)) {
+      console.log('*** #delete() - batchDelete', params)
+      return await this.connection.batchDelete(params)
+    } else {
+      console.log('*** #delete() - delete')
+      return await this.connection.delete(params)
+    }
+  }
+
   async save() {
     console.log('*** #save()')
     console.log('*******')
@@ -112,4 +139,6 @@ module.exports = class Base {
     const response = await new this.constructor.connection(this.data).save()
     return response
   }
+
+
 }

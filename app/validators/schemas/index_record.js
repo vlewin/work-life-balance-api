@@ -3,8 +3,8 @@ module.exports = {
   properties: {
     user_id: {
       type: 'string',
-      minLength: 2,
-      maxLength: 15
+      minLength: 5,
+      maxLength: 50
     },
     month: {
       type: 'integer'

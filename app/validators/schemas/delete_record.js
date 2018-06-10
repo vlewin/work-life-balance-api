@@ -6,7 +6,7 @@ module.exports = {
       minLength: 5,
       maxLength: 50
     },
-    month: {
+    timestamp: {
       type: 'integer'
     },
     week: {

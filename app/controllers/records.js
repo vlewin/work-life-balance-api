@@ -4,7 +4,7 @@ const Lambda = require('../helpers/lambda')
 
 
 module.exports = {
-  index: async function (event, context, callback) {
+  index: async (event, context, callback) => {
     try {
       console.log(process.env.TZ)
 
@@ -18,11 +18,25 @@ module.exports = {
     }
   },
 
-  create: async function (event, context, callback) {
+  create: async (event, context, callback) => {
     try {
       const params = Lambda.params(event)
       const response = await Record.create(Validator.validate(params, 'create_record'))
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers: Lambda.headers })
+    } catch (error) {
+      console.log('ERROR:', error)
+      callback(null, { statusCode: 422, body: error.message, headers: Lambda.headers })
+    }
+  },
+
+  delete: async (event, context, callback) => {
+    try {
+      const params = Lambda.params(event)
+      // FIXME: Add json schema validation
+      console.log('event', params.id)
+      const record = await Record.delete({ user_id: params.user_id, timestamp: params.id })
+
+      callback(null, { statusCode: 201, body: null, headers: Lambda.headers })
     } catch (error) {
       console.log('ERROR:', error)
       callback(null, { statusCode: 422, body: error.message, headers: Lambda.headers })

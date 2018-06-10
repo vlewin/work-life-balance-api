@@ -68,4 +68,19 @@ describe('Records controller', () => {
       })
     })
   })
+
+  describe('#delete', () => {
+    describe('Valid parameters', () => {
+      it('deletes record and returns 201 status code', async () => {
+        event.body = { user_id: 'auth0|12345', date: '01.01.2018', month: '1', week: '1' }
+
+        const callback = jest.fn((_, response) => {
+          expect(response.statusCode).toBe(201)
+        })
+
+        await recordsController.create(event, context, callback)
+      })
+    })
+  })
+
 })
