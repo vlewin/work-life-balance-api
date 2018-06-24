@@ -7,6 +7,10 @@ const querystring = require('querystring');
 
 module.exports = {
   show: async function (event, context, callback) {
+    console.log('*** Incoming event ***')
+    console.log(event)
+    console.log('*** ************** ***')
+
     try {
       const params = Lambda.params(event)
       // FIXME: Move to lambda helpers
@@ -24,14 +28,19 @@ module.exports = {
   },
 
   update: async (event, context, callback) => {
-    console.log('*********** START EVENT JSON ***********')
-    console.log(JSON.stringify(event))
-    console.log('*********** END EVENT JSON ***********')
+    console.log('*** Incoming event ***')
+    console.log(event)
+    console.log('*** ************** ***')
 
     try {
       if(event && event.Records){
         const user_id = Lambda.convertStreamData(event.Records[0].dynamodb['Keys']).user_id
         let balance = await Balance.findById(user_id) || {}
+
+        console.log('*********** CURRENT BALANCE ***********')
+        console.log(balance)
+        console.log('*********** *************** ***********')
+
 
         event.Records.forEach((record) => {
           console.log(user_id, record.eventName)
@@ -58,12 +67,14 @@ module.exports = {
               // balance[new_timestamp.reason] += 1
             }
           } else if (record.eventName === 'REMOVE') {
+            console.log('REMOVE EVENT')
             const timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
 
             if(timestamp.type === 'presence') {
               // FIXME: Why I get no total in event payload?
               balance.total -= parseFloat(timestamp.total) || 0
             } else {
+              balance[timestamp.reason] -= 1
               // balance[new_timestamp.reason] += 1
             }
 
@@ -74,6 +85,11 @@ module.exports = {
         })
 
         const params = Validator.validate(balance, 'update_balance')
+
+        console.log('*********** NEW BALANCE ***********')
+        console.log(params)
+        console.log('*********** *************** ***********')
+
         await Balance.update(params)
 
       } else {

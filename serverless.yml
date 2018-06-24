@@ -29,6 +29,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:DeleteItem
         - dynamodb:BatchWriteItem
 
         # NOTE: Permissions needed for stream

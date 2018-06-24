@@ -5,6 +5,10 @@ const Lambda = require('../helpers/lambda')
 
 module.exports = {
   index: async (event, context, callback) => {
+    console.log('*** Incoming event ***')
+    console.log(event)
+    console.log('*** ************** ***')
+    
     try {
       console.log(process.env.TZ)
 
@@ -19,6 +23,10 @@ module.exports = {
   },
 
   create: async (event, context, callback) => {
+    console.log('*** Incoming event ***')
+    console.log(event)
+    console.log('*** ************** ***')
+
     try {
       const params = Lambda.params(event)
       const response = await Record.create(Validator.validate(params, 'create_record'))
@@ -30,6 +38,10 @@ module.exports = {
   },
 
   delete: async (event, context, callback) => {
+    console.log('*** Incoming event ***')
+    console.log(event)
+    console.log('*** ************** ***')
+
     try {
       const params = Lambda.params(event)
       // FIXME: Add json schema validation

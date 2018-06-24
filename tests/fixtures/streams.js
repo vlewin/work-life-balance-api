@@ -326,6 +326,40 @@ module.exports = {
         }
       }
     }]
-  }
+  },
 
+  removeAbsenceVacationEvent: {
+    "Records": [
+        {
+            "eventName": "REMOVE",
+            "dynamodb": {
+                "Keys": {
+                    "user_id": {
+                        "S": "user12345"
+                    },
+                    "timestamp": {
+                        "N": "1528840800000"
+                    }
+                },
+                "OldImage": {
+                    "date": {
+                        "S": "Wed Jun 13 2018"
+                    },
+                    "reason": {
+                        "S": "vacation"
+                    },
+                    "user_id": {
+                        "S": "auth0|5b0fd1cb21652a131b051f7a"
+                    },
+                    "type": {
+                        "S": "absence"
+                    },
+                    "timestamp": {
+                        "N": "1528840800000"
+                    }
+                }
+            }
+        }
+    ]
+  }
 }

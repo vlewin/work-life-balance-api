@@ -2,11 +2,13 @@
   "scripts": {
     "start": "serverless offline --host 0.0.0.0 start -s development",
     "jest": "NODE_ENV=test jest --bail --watch",
-    "test": "NODE_ENV=test jest ./tests",
+    "test": "NODE_ENV=test jest",
+    "test:unit": "NODE_ENV=test jest ./tests/unit",
     "test:functional": "NODE_ENV=test jest ./tests/functional",
     "test:watch": "NODE_ENV=test jest ./tests --watch",
     "package": "yarn run transpile; sls package -v",
-    "deploy": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s development; yarn"
+    "deploy": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s development; yarn",
+    "deploy:production": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s production; yarn"
   },
   "dependencies": {
     "ajv": "^6.4.0",

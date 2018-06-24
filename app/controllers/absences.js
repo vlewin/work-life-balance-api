@@ -5,6 +5,10 @@ const Lambda = require('../helpers/lambda')
 
 module.exports = {
   index: async function (event, context, callback) {
+    console.log('*** Incoming event ***')
+    console.log(event)
+    console.log('*** ************** ***')
+
     try {
       console.log(process.env.TZ)
       const params = Lambda.params(event)
@@ -19,6 +23,10 @@ module.exports = {
   },
 
   create: async function (event, context, callback) {
+    console.log('*** Incoming event ***')
+    console.log(event)
+    console.log('*** ************** ***')
+    
     try {
       // FIXME: Extend JSONSchema and accept array of objects
       // const response = await Absence.create(Validator.validate(params, 'create_absence'))
