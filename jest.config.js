@@ -1,5 +1,5 @@
 module.exports = {
-  verbose: true,
+  verbose: false,
   bail: true,
-  moduleDirectories: ["node_modules", "src", "test"],
-};
+  moduleDirectories: ['node_modules', 'src', 'test']
+}

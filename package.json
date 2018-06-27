@@ -3,7 +3,7 @@
     "start": "serverless offline --host 0.0.0.0 start -s development",
     "jest": "NODE_ENV=test jest --bail --watch",
     "test": "NODE_ENV=test jest",
-    "test:unit": "NODE_ENV=test jest ./tests/unit",
+    "test:unit": "NODE_ENV=test jest ./tests/unit  --silent",
     "test:functional": "NODE_ENV=test jest ./tests/functional",
     "test:watch": "NODE_ENV=test jest ./tests --watch",
     "package": "yarn run transpile; sls package -v",
@@ -24,8 +24,6 @@
   "devDependencies": {
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
     "eslint": "^4.17.0",

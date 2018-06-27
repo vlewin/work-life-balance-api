@@ -1,0 +1,60 @@
+{
+  "Records": [
+      {
+          "eventID": "a5a5bd65e45e4cc07d971f408262655c",
+          "eventName": "MODIFY",
+          "eventVersion": "1.1",
+          "eventSource": "aws:dynamodb",
+          "awsRegion": "eu-central-1",
+          "dynamodb": {
+              "ApproximateCreationDateTime": 1530125580,
+              "Keys": {
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "timestamp": {
+                      "N": "1530125601000"
+                  }
+              },
+              "NewImage": {
+                  "date": {
+                      "S": "Wed Jun 27 2018"
+                  },
+                  "reason": {
+                      "S": "sickness"
+                  },
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "type": {
+                      "S": "absence"
+                  },
+                  "timestamp": {
+                      "N": "1530125601000"
+                  }
+              },
+              "OldImage": {
+                  "date": {
+                      "S": "Wed Jun 27 2018"
+                  },
+                  "reason": {
+                      "S": "vacation"
+                  },
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "type": {
+                      "S": "absence"
+                  },
+                  "timestamp": {
+                      "N": "1530125601000"
+                  }
+              },
+              "SequenceNumber": "233121300000000006873911835",
+              "SizeBytes": 315,
+              "StreamViewType": "NEW_AND_OLD_IMAGES"
+          },
+          "eventSourceARN": "arn:aws:dynamodb:eu-central-1:435287293695:table/records-development/stream/2018-05-09T19:03:47.808"
+      }
+  ]
+}

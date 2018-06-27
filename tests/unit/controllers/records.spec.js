@@ -9,7 +9,7 @@ describe('Records controller', () => {
 
   describe('#index', () => {
     describe('Invalid parameters', () => {
-      it('Returns 422 with missing requried params message if no parameters', async () => {
+      it('Returns 422 with missing required params message if no parameters', async () => {
         const callback = jest.fn((_, response) => {
           expect(response.statusCode).toBe(422)
           expect(JSON.parse(response.body).message).toBe('Missing required property: user_id')
@@ -82,5 +82,4 @@ describe('Records controller', () => {
       })
     })
   })
-
 })

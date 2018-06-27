@@ -1,9 +1,54 @@
 const Balance = require('../models/balance')
 const Validator = require('../validators/schema')
 const Lambda = require('../helpers/lambda')
-const querystring = require('querystring');
+const querystring = require('querystring')
 
+function insertBalance (balance, newTimestamp) {
+  console.log(newTimestamp)
+  if (newTimestamp.type === 'presence') {
+    balance.total += parseFloat(newTimestamp.total)
+  } else {
+    balance[newTimestamp.reason] += 1
+  }
 
+  return balance
+}
+
+function updateBalance (balance, newTimestamp, oldTimestamp) {
+  if (newTimestamp.type === 'presence') {
+    console.log('-+ Presence')
+
+    let newTotal = parseFloat(newTimestamp.duration) || 0
+    let oldTotal = parseFloat(oldTimestamp.duration) || 0
+
+    balance.total += (newTotal - oldTotal)
+  } else {
+    console.log('-+ Absence')
+
+    if (balance[oldTimestamp.reason] > 0) {
+      balance[oldTimestamp.reason] -= 1
+    }
+
+    balance[newTimestamp.reason] += 1
+  }
+
+  return balance
+}
+
+function removeBalance (balance, oldTimestamp) {
+  if (oldTimestamp.type === 'presence') {
+    console.log('-- Presence')
+    balance.total -= parseFloat(oldTimestamp.total) || 0
+  } else {
+    console.log('-- Absence')
+
+    if (balance[oldTimestamp.reason] > 0) {
+      balance[oldTimestamp.reason] -= 1
+    }
+  }
+
+  return balance
+}
 
 module.exports = {
   show: async function (event, context, callback) {
@@ -14,8 +59,8 @@ module.exports = {
     try {
       const params = Lambda.params(event)
       // FIXME: Move to lambda helpers
-      const user_id = querystring.escape(event.pathParameters.id)
-      console.info('**** Get balance for UserID', user_id, params)
+      const userId = querystring.escape(event.pathParameters.id)
+      console.info('**** Get balance for UserID', userId, params)
 
       const response = await Balance.findById(params.user_id)
       console.info('**** BALANCE:GET RESPONSE', JSON.stringify(response))
@@ -28,56 +73,28 @@ module.exports = {
   },
 
   update: async (event, context, callback) => {
-    console.log('*** Incoming event ***')
-    console.log(event)
-    console.log('*** ************** ***')
-
     try {
-      if(event && event.Records){
-        const user_id = Lambda.convertStreamData(event.Records[0].dynamodb['Keys']).user_id
-        let balance = await Balance.findById(user_id) || {}
+      if (event && event.Records) {
+        const userId = Lambda.convertStreamData(event.Records[0].dynamodb['Keys']).user_id
+        const balance = await Balance.findById(userId) || {}
 
-        console.log('*********** CURRENT BALANCE ***********')
-        console.log(balance)
-        console.log('*********** *************** ***********')
-
+        console.log('Balance:', balance)
+        console.log(JSON.stringify(event.Records))
 
         event.Records.forEach((record) => {
-          console.log(user_id, record.eventName)
-          if(record.eventName === 'INSERT') {
-            const timestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
-
-            if(timestamp.type === 'presence') {
-              balance.total += parseFloat(timestamp.total)
-            } else {
-              balance[timestamp.reason] += 1
-            }
-
+          if (record.eventName === 'INSERT') {
+            console.log('*** INSERT EVENT')
+            const newTimestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
+            insertBalance(balance, newTimestamp)
           } else if (record.eventName === 'MODIFY') {
-            const new_timestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
-            const old_timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
-
-            if(new_timestamp.type === 'presence') {
-              // FIXME: Why I get no total in event payload?
-              let new_total = parseFloat(new_timestamp.duration) || 0
-              let old_total = parseFloat(old_timestamp.duration) || 0
-
-              balance.total += new_total - old_total
-            } else {
-              // balance[new_timestamp.reason] += 1
-            }
+            console.log('*** MODIFY EVENT')
+            const newTimestamp = Lambda.convertStreamData(record.dynamodb['NewImage'])
+            const oldTimestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
+            updateBalance(balance, newTimestamp, oldTimestamp)
           } else if (record.eventName === 'REMOVE') {
-            console.log('REMOVE EVENT')
-            const timestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
-
-            if(timestamp.type === 'presence') {
-              // FIXME: Why I get no total in event payload?
-              balance.total -= parseFloat(timestamp.total) || 0
-            } else {
-              balance[timestamp.reason] -= 1
-              // balance[new_timestamp.reason] += 1
-            }
-
+            console.log('*** REMOVE EVENT')
+            const oldTimestamp = Lambda.convertStreamData(record.dynamodb['OldImage'])
+            removeBalance(balance, oldTimestamp)
           } else {
             // Should never happen
             console.log('ERROR: Unknown event')
@@ -85,18 +102,12 @@ module.exports = {
         })
 
         const params = Validator.validate(balance, 'update_balance')
-
-        console.log('*********** NEW BALANCE ***********')
-        console.log(params)
-        console.log('*********** *************** ***********')
-
         await Balance.update(params)
-
       } else {
         // Should never happen
         console.log('ERROR: No records')
       }
-    } catch(error) {
+    } catch (error) {
       console.log('ERROR:', error)
     }
   }

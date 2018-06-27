@@ -1,0 +1,58 @@
+{
+  "Records": [
+      {
+          "eventID": "ac4763938da6515831310f639f5e0f91",
+          "eventName": "INSERT",
+          "eventVersion": "1.1",
+          "eventSource": "aws:dynamodb",
+          "awsRegion": "eu-central-1",
+          "dynamodb": {
+              "ApproximateCreationDateTime": 1530128880,
+              "Keys": {
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "timestamp": {
+                      "N": "1530128929000"
+                  }
+              },
+              "NewImage": {
+                  "date": {
+                      "S": "Tue Jun 26 2018"
+                  },
+                  "duration": {
+                      "N": "1.58"
+                  },
+                  "reason": {
+                      "S": "vacation"
+                  },
+                  "total": {
+                      "N": "-6.42"
+                  },
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "start": {
+                      "S": "0"
+                  },
+                  "end": {
+                      "S": "0"
+                  },
+                  "type": {
+                      "S": "absence"
+                  },
+                  "pause": {
+                      "S": "0"
+                  },
+                  "timestamp": {
+                      "N": "1530128929000"
+                  }
+              },
+              "SequenceNumber": "233121900000000006874356598",
+              "SizeBytes": 186,
+              "StreamViewType": "NEW_AND_OLD_IMAGES"
+          },
+          "eventSourceARN": "arn:aws:dynamodb:eu-central-1:435287293695:table/records-development/stream/2018-05-09T19:03:47.808"
+      }
+  ]
+}
