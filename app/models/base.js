@@ -1,6 +1,7 @@
 const dynamoose = require('dynamoose')
 const schema = require('./schemas/record')
-const datetime = require("../helpers/datetime");
+const datetime = require('../helpers/datetime')
+const Model = dynamoose.model(process.env.RECORDS_TABLE || 'records-development', schema, { update: false })
 
 module.exports = class Base {
   constructor (data) {
@@ -10,7 +11,7 @@ module.exports = class Base {
   }
 
   static get connection () {
-    return dynamoose.model(process.env.RECORDS_TABLE || 'records-development', schema, { update: false })
+    return Model
   }
 
   static async findById (userId) {
@@ -19,7 +20,7 @@ module.exports = class Base {
     // const response = await this.connection.query({ user_id: { eq: userId } }).filter('type').eq(this.type).exec()
     const query = this.connection.query('user_id').eq(userId)
 
-    if(this.type) {
+    if (this.type) {
       query.filter('type').eq(this.type)
     }
 
@@ -40,7 +41,7 @@ module.exports = class Base {
 
     const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1])
 
-    if(this.type) {
+    if (this.type) {
       query.filter('type').eq(this.type)
     }
 
@@ -60,7 +61,7 @@ module.exports = class Base {
 
     const query = this.connection.query('user_id').eq(userId).where('timestamp').between(range[0], range[1])
 
-    if(this.type) {
+    if (this.type) {
       query.filter('type').eq(this.type)
     }
 
@@ -75,7 +76,7 @@ module.exports = class Base {
     // console.log('findByDate', userId, timestamp)
     const query = this.connection.query('user_id').eq(userId).where('timestamp').eq(timestamp)
 
-    if(this.type) {
+    if (this.type) {
       query.filter('type').eq(this.type)
     }
 
@@ -118,27 +119,25 @@ module.exports = class Base {
     return response
   }
 
-  static async delete(params = {}) {
+  static async delete (params = {}) {
     console.log(params)
 
     if (Array.isArray(params)) {
       console.log('*** #delete() - batchDelete', params)
-      return await this.connection.batchDelete(params)
+      await this.connection.batchDelete(params)
     } else {
       console.log('*** #delete() - delete')
-      return await this.connection.delete(params)
+      await this.connection.delete(params)
     }
   }
 
-  async save() {
+  async save () {
     console.log('*** #save()')
     console.log('*******')
     console.log(this.data)
     console.log('*******')
 
-    const response = await new this.constructor.connection(this.data).save()
+    const response = await new Model(this.data).save()
     return response
   }
-
-
 }

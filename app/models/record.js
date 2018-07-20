@@ -1,4 +1,3 @@
-// const Timestamp = require('./timestamp')
 const datetime = require('../helpers/datetime')
 const Base = require('./base')
 
@@ -28,7 +27,7 @@ module.exports = class Record extends Base {
 
   static _calculateDuration (data) {
     console.log('*** duration', data)
-    if(data.duration) {
+    if (data.duration) {
       return data.duration
     }
 
@@ -40,7 +39,7 @@ module.exports = class Record extends Base {
 
   static _format (data) {
     console.log('*** format', data)
-    const date = new Date(data.timestamp)
+    // const date = new Date(data.timestamp)
     // console.log('*** Date from timestamp', date)
     const duration = this._calculateDuration(data)
     return {

@@ -1,13 +1,13 @@
 const TABLE_NAME = process.env.BALANCE_TABLE || 'balance-development'
 const dynamoose = require('dynamoose')
 const schema = require('./schemas/balance')
-const connection = dynamoose.model(TABLE_NAME, schema, { update: true })
+const Model = dynamoose.model(TABLE_NAME, schema, { update: true })
 
 console.log('TABLE_NAME', TABLE_NAME)
 
 module.exports = class Balance {
   static get connection () {
-    return connection
+    return Model
   }
 
   static async findById (userId) {
@@ -21,14 +21,14 @@ module.exports = class Balance {
   static async update (params = []) {
     console.log('*** Balance.update()', params)
 
-      let response = {}
-      if (Array.isArray(params)) {
-        response = await this.connection.batchPut(params)
-      } else {
-        response = await new this.connection(params).save()
-      }
+    let response = {}
+    if (Array.isArray(params)) {
+      response = await this.connection.batchPut(params)
+    } else {
+      response = await new Model(params).save()
+    }
 
-      console.log('*** Balance.update() - response', response.user_id, response.total, response.vacation, response.sickness)
-      return response
+    console.log('*** Balance.update() - response', response.user_id, response.total, response.vacation, response.sickness)
+    return response
   }
 }

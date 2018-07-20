@@ -25,7 +25,7 @@ module.exports = class Timestamp extends Base {
 
   static _calculateDuration (data) {
     console.log('*** duration', data)
-    if(data.duration) {
+    if (data.duration) {
       return data.duration
     }
 
@@ -37,7 +37,7 @@ module.exports = class Timestamp extends Base {
 
   static _format (data) {
     console.log('*** format', data)
-    const date = new Date(data.timestamp)
+    // const date = new Date(data.timestamp)
     // console.log('*** Date from timestamp', date)
     const duration = this._calculateDuration(data)
     return {

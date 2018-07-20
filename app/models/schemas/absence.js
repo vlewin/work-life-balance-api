@@ -43,7 +43,7 @@ module.exports = new Schema({
     default: 8.5
 
     // validate: (v) => ['vacation', 'sickness', 'holiday'].includes(v)
-  },
+  }
 },
 {
   throughput: {read: 1, write: 1}

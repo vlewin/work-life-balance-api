@@ -23,24 +23,9 @@ const generatePolicy = (principalId, effect, resource) => {
   return authResponse
 }
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization',
-  'Access-Control-Allow-Credentials': true,
-  'Content-Type': 'application/json'
-}
-
 // Reusable Authorizer function, set on `authorizer` field in serverless.yml
 module.exports.handler = (event, context, callback) => {
-  // console.log('**** Event ****')
-  // console.log(event)
-  // console.log('**** Context ****')
-  // console.log(context)
-  //
-  // console.log('**** NODE_ENV ****')
-  // console.log(process.env.NODE_ENV)
-
-  if(event.authorizationToken === 'TEST-TOKEN' && process.env.IS_OFFLINE) {
+  if (event.authorizationToken === 'TEST-TOKEN' && process.env.IS_OFFLINE) {
     callback(null, generatePolicy('user12345', 'Allow', event.methodArn))
     return true
   }
@@ -74,7 +59,6 @@ module.exports.handler = (event, context, callback) => {
         if (err) {
           // console.log('**** JWT TOKEN IS INVALID:', err.message)
           callback('Unauthorized')
-          // callback('Unauthorized', { statusCode: 403, headers: headers, body: err.message })
         } else {
           console.log('**** ALL GREEN:', decoded.sub, 'ALLOW', event.methodArn)
           callback(null, generatePolicy(decoded.sub, 'Allow', event.methodArn))
