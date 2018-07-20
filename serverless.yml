@@ -42,10 +42,6 @@ provider:
       Resource:
         - { "Fn::GetAtt": ["RecordsDynamoDbTable", "Arn"] }
         - { "Fn::GetAtt": ["BalanceDynamoDbTable", "Arn"] }
-
-      # Resource: "*"
-      # Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
-
 plugins:
   - serverless-offline
   # - serverless-plugin-stage-variables
@@ -62,7 +58,6 @@ package:
 
 # TODO: Microservices Pattern vs Services Pattern
 # https://serverless.com/blog/serverless-architecture-code-patterns/#4-the-graph-pattern
-
 functions:
   authorizer:
     handler: app/authorizer/index.handler
@@ -92,7 +87,6 @@ functions:
           startingPosition: LATEST
           batchSize: 1
           enabled: true
-
 
   RecordsIndex:
     handler: app/controllers/records.index

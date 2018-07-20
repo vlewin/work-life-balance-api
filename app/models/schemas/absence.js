@@ -41,8 +41,6 @@ module.exports = new Schema({
     type: Number,
     required: false,
     default: 8.5
-
-    // validate: (v) => ['vacation', 'sickness', 'holiday'].includes(v)
   }
 },
 {

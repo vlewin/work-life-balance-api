@@ -4,23 +4,10 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       TableName: ${self:provider.environment.BALANCE_TABLE}
-      # NOTE: A list of AttributeName and AttributeType objects that describe the key schema for the table and indexes.
-
       AttributeDefinitions:
         -
           AttributeName: user_id
           AttributeType: S
-
-
-        # -
-        #   AttributeName: total
-        #   AttributeType: N
-        # -
-        #   AttributeName: vacation
-        #   AttributeType: N
-        # -
-        #   AttributeName: sickness
-        #   AttributeType: N
       KeySchema:
         -
           AttributeName: user_id
