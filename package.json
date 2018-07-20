@@ -6,6 +6,7 @@
     "test:unit": "NODE_ENV=test jest ./tests/unit  --silent",
     "test:functional": "NODE_ENV=test jest ./tests/functional",
     "test:watch": "NODE_ENV=test jest ./tests --watch",
+    "lint": "eslint . --fix",
     "package": "yarn run transpile; sls package -v",
     "deploy": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s development; yarn",
     "deploy:production": "yarn install --production --ignore-scripts --prefer-offline; sls deploy -s production; yarn"
