@@ -1,0 +1,53 @@
+{
+  "headers": {
+    "Host": "localhost:3000",
+    "Connection": "keep-alive",
+    "Authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1UTTRNMEV6T1VJeVJUbEVRVUk1TnprMVJUSTNNamhFT1RrME9FTkJPRFkyTlVKRFJURTBRZyJ9.eyJpc3MiOiJodHRwczovL3dvcmstbGlmZS1iYWxhbmNlLmV1LmF1dGgwLmNvbS8iLCJzdWIiOiJnaXRodWJ8NjExNDY2IiwiYXVkIjpbImh0dHBzOi8vd29yay1saWZlLWJhbGFuY2UuZXUuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL3dvcmstbGlmZS1iYWxhbmNlLmV1LmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1MjUzNTIwNzAsImV4cCI6MTUyNTM1OTI3MCwiYXpwIjoiVXduMVQ3RXlCdzgzUlE1RkVWUnpIb2MwRTZNQjFVYVQiLCJzY29wZSI6Im9wZW5pZCJ9.X8s4wDC8QH3mrktnSMYTZgJsrlxSVQfaO7jy7wNTGJt__g-fSegEM4WSy2BgUXZU32Ghb5P1U5-BKR33Ib7GC59jXdAeFemK1EI5dCbFx7gISn-mMr7iP8l_mnD23_F-n-2XJzBCxrsfm6gE1HZSt7-InG2uC-74vlL1qtl9yIl2FLntX7Aa5ZP1BLialKMIONPJ7UQE8zdRiOPdFEX8J6ZcAK4COx7IQpqOtS-lRKyDh12yrBthj5yqj5FkFaZ9WBApXbvgUVSNd3wjin2tDqQcB0rDfgpC3FUI8vc3CfMVYZ2sdoUnyolL6pH2CcByVh-ZM1r53iNwfPjzAmqq-g",
+    "Origin": "http://localhost:8080",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36",
+    "Accept": "*/*",
+    "Referer": "http://localhost:8080/",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7"
+  },
+  "path": "/records",
+  "pathParameters": null,
+  "requestContext": {
+    "accountId": "offlineContext_accountId",
+    "resourceId": "offlineContext_resourceId",
+    "apiId": "offlineContext_apiId",
+    "stage": "development",
+    "requestId": "offlineContext_requestId_",
+    "identity": {
+      "cognitoIdentityPoolId": "offlineContext_cognitoIdentityPoolId",
+      "accountId": "offlineContext_accountId",
+      "cognitoIdentityId": "offlineContext_cognitoIdentityId",
+      "caller": "offlineContext_caller",
+      "apiKey": "offlineContext_apiKey",
+      "sourceIp": "127.0.0.1",
+      "cognitoAuthenticationType": "offlineContext_cognitoAuthenticationType",
+      "cognitoAuthenticationProvider": "offlineContext_cognitoAuthenticationProvider",
+      "userArn": "offlineContext_userArn",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36",
+      "user": "offlineContext_user"
+    },
+    "authorizer": {
+      "authId": "github|611466",
+      "foo": "TEST",
+      "principalId": "github|611466",
+      "claims": [
+        null
+      ]
+    },
+    "resourcePath": "/records",
+    "httpMethod": "GET"
+  },
+  "resource": "/records",
+  "httpMethod": "GET",
+  "queryStringParameters": {
+    "week": "18"
+  },
+  "stageVariables": null,
+  "body": null,
+  "isOffline": true
+}

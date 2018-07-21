@@ -1,0 +1,85 @@
+
+{
+  "Records": [
+      {
+          "eventID": "05942cdb4d4de6027721666a4bd1349c",
+          "eventName": "MODIFY",
+          "eventVersion": "1.1",
+          "eventSource": "aws:dynamodb",
+          "awsRegion": "eu-central-1",
+          "dynamodb": {
+              "ApproximateCreationDateTime": 1530128520,
+              "Keys": {
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "timestamp": {
+                      "N": "1530126811000"
+                  }
+              },
+              "NewImage": {
+                  "date": {
+                      "S": "Mon Jun 25 2018"
+                  },
+                  "duration": {
+                      "N": "7.5"
+                  },
+                  "total": {
+                      "N": "-0.5"
+                  },
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "start": {
+                      "S": "08:00"
+                  },
+                  "end": {
+                      "S": "16:00"
+                  },
+                  "type": {
+                      "S": "presence"
+                  },
+                  "pause": {
+                      "S": "00:30"
+                  },
+                  "timestamp": {
+                      "N": "1530126811000"
+                  }
+              },
+              "OldImage": {
+                  "date": {
+                      "S": "Mon Jun 25 2018"
+                  },
+                  "duration": {
+                      "N": "8"
+                  },
+                  "total": {
+                      "N": "0"
+                  },
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "start": {
+                      "S": "08:00"
+                  },
+                  "end": {
+                      "S": "17:30"
+                  },
+                  "type": {
+                      "S": "presence"
+                  },
+                  "pause": {
+                      "S": "00:30"
+                  },
+                  "timestamp": {
+                      "N": "1530126811000"
+                  }
+              },
+              "SequenceNumber": "233121700000000006874306855",
+              "SizeBytes": 313,
+              "StreamViewType": "NEW_AND_OLD_IMAGES"
+          },
+          "eventSourceARN": "arn:aws:dynamodb:eu-central-1:435287293695:table/records-development/stream/2018-05-09T19:03:47.808"
+      }
+  ]
+}

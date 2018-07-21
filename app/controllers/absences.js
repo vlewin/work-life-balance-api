@@ -1,18 +1,19 @@
-const Record = require('../models/record')
+const Absence = require('../models/absence')
 const Validator = require('../validators/schema')
 const Lambda = require('../helpers/lambda')
 
 module.exports = {
-  index: async (event, context, callback) => {
+  index: async function (event, context, callback) {
     console.log('*** Incoming event ***')
     console.log(event)
     console.log('*** ************** ***')
 
-    try {
-      console.log(process.env.TZ)
+    console.log(process.env.TZ)
 
+    try {
       const params = Lambda.params(event)
-      const response = await Record.all(Validator.validate(params, 'index_record'))
+      const response = await Absence.all(Validator.validate(params, 'index_absence'))
+      console.log(response)
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers: Lambda.headers })
     } catch (error) {
       console.log('ERROR:', error)
@@ -20,33 +21,20 @@ module.exports = {
     }
   },
 
-  create: async (event, context, callback) => {
+  create: async function (event, context, callback) {
     console.log('*** Incoming event ***')
     console.log(event)
     console.log('*** ************** ***')
 
     try {
+      // FIXME: Extend JSONSchema and accept array of objects
+      // const response = await Absence.create(Validator.validate(params, 'create_absence'))
+      // console.log(params)
       const params = Lambda.params(event)
-      const response = await Record.create(Validator.validate(params, 'create_record'))
+      const body = JSON.parse(event.body).map((r) => Object.assign(r, { user_id: params.user_id }))
+      console.log(body)
+      const response = await Absence.create(body)
       callback(null, { statusCode: 200, body: JSON.stringify(response), headers: Lambda.headers })
-    } catch (error) {
-      console.log('ERROR:', error)
-      callback(null, { statusCode: 422, body: error.message, headers: Lambda.headers })
-    }
-  },
-
-  delete: async (event, context, callback) => {
-    console.log('*** Incoming event ***')
-    console.log(event)
-    console.log('*** ************** ***')
-
-    try {
-      const params = Lambda.params(event)
-      // FIXME: Add json schema validation
-      console.log('event', params.id)
-      await Record.delete({ user_id: params.user_id, timestamp: params.id })
-
-      callback(null, { statusCode: 201, body: null, headers: Lambda.headers })
     } catch (error) {
       console.log('ERROR:', error)
       callback(null, { statusCode: 422, body: error.message, headers: Lambda.headers })

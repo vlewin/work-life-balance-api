@@ -1,0 +1,18 @@
+Resources:
+  BalanceDynamoDbTable:
+    Type: 'AWS::DynamoDB::Table'
+    DeletionPolicy: Delete
+    Properties:
+      TableName: ${self:provider.environment.BALANCE_TABLE}
+      AttributeDefinitions:
+        -
+          AttributeName: user_id
+          AttributeType: S
+      KeySchema:
+        -
+          AttributeName: user_id
+          KeyType: HASH
+
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

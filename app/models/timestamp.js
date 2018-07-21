@@ -1,10 +1,8 @@
 const datetime = require('../helpers/datetime')
 const Base = require('./base')
 
-module.exports = class Record extends Base {
+module.exports = class Timestamp extends Base {
   constructor (data) {
-    console.log('**** RECORD CONSTRUCTOR')
-
     super(data)
 
     this.data = this.constructor._format(data)

@@ -1,0 +1,53 @@
+Resources:
+  RecordsDynamoDbTable:
+    Type: 'AWS::DynamoDB::Table'
+    DeletionPolicy: Delete
+    Properties:
+      TableName: ${self:provider.environment.RECORDS_TABLE}
+
+      AttributeDefinitions:
+        -
+          AttributeName: user_id
+          AttributeType: S
+        -
+          AttributeName: timestamp
+          AttributeType: N
+        -
+          AttributeName: type
+          AttributeType: S
+        -
+          AttributeName: reason
+          AttributeType: S
+      KeySchema:
+        -
+          AttributeName: user_id
+          KeyType: HASH
+        -
+          AttributeName: timestamp
+          KeyType: RANGE
+
+      LocalSecondaryIndexes:
+      - IndexName: TypeLSI
+        KeySchema:
+        - AttributeName: user_id
+          KeyType: HASH
+        - AttributeName: type
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+
+      - IndexName: ReasonLSI
+        KeySchema:
+        - AttributeName: user_id
+          KeyType: HASH
+        - AttributeName: reason
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES

@@ -1,0 +1,58 @@
+{
+  "Records": [
+      {
+          "eventID": "b5225c924b3912456a060397d3d81c48",
+          "eventName": "REMOVE",
+          "eventVersion": "1.1",
+          "eventSource": "aws:dynamodb",
+          "awsRegion": "eu-central-1",
+          "dynamodb": {
+              "ApproximateCreationDateTime": 1530129000,
+              "Keys": {
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "timestamp": {
+                      "N": "1530128929000"
+                  }
+              },
+              "OldImage": {
+                  "date": {
+                      "S": "Tue Jun 26 2018"
+                  },
+                  "duration": {
+                      "N": "1.58"
+                  },
+                  "reason": {
+                      "S": "vacation"
+                  },
+                  "total": {
+                      "N": "-6.42"
+                  },
+                  "user_id": {
+                      "S": "user12345"
+                  },
+                  "start": {
+                      "S": "0"
+                  },
+                  "end": {
+                      "S": "0"
+                  },
+                  "type": {
+                      "S": "absence"
+                  },
+                  "pause": {
+                      "S": "0"
+                  },
+                  "timestamp": {
+                      "N": "1530128929000"
+                  }
+              },
+              "SequenceNumber": "233122000000000006874369994",
+              "SizeBytes": 186,
+              "StreamViewType": "NEW_AND_OLD_IMAGES"
+          },
+          "eventSourceARN": "arn:aws:dynamodb:eu-central-1:435287293695:table/records-development/stream/2018-05-09T19:03:47.808"
+      }
+  ]
+}
