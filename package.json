@@ -1,4 +1,13 @@
 {
+  "name": "work-life-balance-api",
+  "description": "AWS Lambda based REST API for work-life-balance-ui project",
+  "version": "1.0.1",
+  "author": "Vladislav Lewin <vlewin@suse.de>",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vlewin/work-life-balance-api"
+  },
   "scripts": {
     "start": "serverless offline start",
     "transpile": "babel --presets es2015 app --out-dir dist",
