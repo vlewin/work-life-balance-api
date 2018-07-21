@@ -1,5 +1,10 @@
 {
-  "presets": ["env", "stage-2"],
-  "sourceMaps": "both",
-  "plugins": []
+  "presets": [
+    ["env", {
+        "targets": {
+            "node": "8"
+        }
+    }]
+  ],
+  "plugins": ["transform-object-rest-spread"]
 }

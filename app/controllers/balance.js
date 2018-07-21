@@ -51,12 +51,14 @@ function removeBalance (balance, oldTimestamp) {
 }
 
 module.exports = {
-  show: async function (event, context, callback) {
+  show: async (event, context, callback) => {
     console.log('*** Incoming event ***')
     console.log(event)
     console.log('*** ************** ***')
 
     try {
+      console.log(process.env.TZ)
+
       const params = Lambda.params(event)
       // FIXME: Move to lambda helpers
       const userId = querystring.escape(event.pathParameters.id)

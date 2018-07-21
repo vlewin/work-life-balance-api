@@ -8,8 +8,9 @@ module.exports = {
     console.log(event)
     console.log('*** ************** ***')
 
+    console.log(process.env.TZ)
+
     try {
-      console.log(process.env.TZ)
       const params = Lambda.params(event)
       const response = await Absence.all(Validator.validate(params, 'index_absence'))
       console.log(response)

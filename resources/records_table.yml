@@ -1,7 +1,7 @@
 Resources:
   RecordsDynamoDbTable:
     Type: 'AWS::DynamoDB::Table'
-    DeletionPolicy: Retain
+    DeletionPolicy: Delete
     Properties:
       TableName: ${self:provider.environment.RECORDS_TABLE}
 
