@@ -25,7 +25,6 @@ provider:
       webpackConfig: 'webpack.config.js'   # Name of webpack configuration file
       includeModules: false   # Node modules configuration for packaging
       packager: 'yarn'   # Packager that will be used to package your external modules
-      # webpackIncludeModules: true
 
   iamRoleStatements:
     - Effect: Allow
@@ -58,17 +57,8 @@ package:
   excludeDevDependencies: true
   include:
     - app/**
-    # - node_modules/**
   exclude:
     - ./**
-    # - node_modules/**
-    # - '!node_modules/ajv/**'
-    # - '!node_modules/ajv/**'
-    # - '!node_modules/date-fns/**'
-    # - '!node_modules/dynamoose/**'
-    # - '!node_modules/jsonwebtoken/**'
-    # - '!node_modules/jwk-to-pem/**'
-    # - '!node_modules/request/**'
 
 # TODO: Microservices Pattern vs Services Pattern
 # https://serverless.com/blog/serverless-architecture-code-patterns/#4-the-graph-pattern

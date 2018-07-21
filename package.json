@@ -15,8 +15,6 @@
     "ajv": "^6.4.0",
     "date-fns": "^1.29.0",
     "dynamoose": "^0.8.7",
-    "jjv": "^1.0.2",
-    "jjve": "^0.5.2",
     "jsonwebtoken": "^8.2.1",
     "jwk-to-pem": "^2.0.0",
     "querystring": "^0.2.0",
@@ -28,7 +26,6 @@
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
     "eslint": "^4.17.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.11.0",
@@ -39,7 +36,6 @@
     "jest": "^22.4.3",
     "serverless-offline": "^3.20.0",
     "serverless-webpack": "^5.2.0",
-    "webpack": "^4.16.1",
-    "webpack-node-externals": "^1.7.2"
+    "webpack": "^4.16.1"
   }
 }

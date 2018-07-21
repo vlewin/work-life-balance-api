@@ -1,10 +1,5 @@
 const path = require('path')
 const slsw = require('serverless-webpack')
-const nodeExternals = require('webpack-node-externals')
-
-console.log(slsw.lib.entries)
-const ext = nodeExternals()
-console.log(ext)
 
 module.exports = {
   entry: slsw.lib.entries,
