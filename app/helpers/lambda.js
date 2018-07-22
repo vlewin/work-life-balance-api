@@ -7,22 +7,22 @@ module.exports = {
   },
 
   params: (event) => {
-    let params = { user_id: event.requestContext.authorizer.principalId }
+    let payload = { user_id: event.requestContext.authorizer.principalId }
 
     if (event.httpMethod === 'GET') {
-      Object.assign(params, event.queryStringParameters)
+      Object.assign(payload, event.queryStringParameters)
     }
 
     if (['PUT', 'PATCH', 'POST'].includes(event.httpMethod)) {
       const body = typeof (event.body) === 'string' ? JSON.parse(event.body) : event.body
-      Object.assign(params, body)
+      Object.assign(payload, body)
     }
 
     if (event.pathParameters) {
-      Object.assign(params, event.pathParameters)
+      Object.assign(payload, event.pathParameters)
     }
 
-    return params
+    return payload
   },
 
   convertStreamData: (data) => {

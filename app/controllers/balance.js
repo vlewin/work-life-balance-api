@@ -60,9 +60,7 @@ module.exports = {
       console.log(process.env.TZ)
 
       const params = Lambda.params(event)
-      // FIXME: Move to lambda helpers
-      const userId = querystring.escape(event.pathParameters.id)
-      console.info('**** Get balance for UserID', userId, params)
+      console.info('**** Get balance for UserID', params.user_id, params)
 
       const response = await Balance.findById(params.user_id)
       console.info('**** BALANCE:GET RESPONSE', JSON.stringify(response))
