@@ -2,6 +2,7 @@ const Balance = require('../models/balance')
 const Validator = require('../validators/schema')
 const Lambda = require('../helpers/lambda')
 const querystring = require('querystring')
+const graphQlClient = require('../models/graphql-client')
 
 function insertBalance (balance, newTimestamp) {
   console.log(newTimestamp)
@@ -103,6 +104,30 @@ module.exports = {
 
         const params = Validator.validate(balance, 'update_balance')
         await Balance.update(params)
+
+        // FIXME: Use webpack loader
+        // https://www.npmjs.com/package/webpack-graphql-loader
+        const query = `
+          mutation UpdateBalance($user_id: String!, $vacation: Int, $sickness: Int, $total: Float) {
+            updateBalanceDevelopment(
+              input: {
+                user_id: $user_id, 
+                vacation: $vacation, 
+                sickness: $sickness, 
+                total: $total
+              }) {
+              user_id
+              vacation
+              sickness
+              total
+            }
+          }`
+
+        const response = await graphQlClient.query(query, params).catch(function (err) {
+          console.log(err.message)
+        })
+
+        console.log(response)
       } else {
         // Should never happen
         console.log('ERROR: No records')

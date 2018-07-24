@@ -1,6 +1,6 @@
 {
   "name": "work-life-balance-api",
-  "description": "AWS Lambda based REST API for work-life-balance-ui project",
+  "description": "AWS Lambda based REST/GraphQL API for work-life-balance-ui project",
   "version": "1.0.1",
   "author": "Vladislav Lewin <vlewin@suse.de>",
   "private": true,
@@ -24,6 +24,7 @@
     "ajv": "^6.4.0",
     "date-fns": "^1.29.0",
     "dynamoose": "^0.8.7",
+    "graphql-client": "^2.0.1",
     "jsonwebtoken": "^8.2.1",
     "jwk-to-pem": "^2.0.0",
     "querystring": "^0.2.0",
@@ -45,6 +46,7 @@
     "jest": "^22.4.3",
     "serverless-offline": "^3.20.0",
     "serverless-webpack": "^5.2.0",
+    "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.16.1"
   }
 }

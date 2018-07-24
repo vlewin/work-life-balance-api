@@ -1,5 +1,7 @@
 const path = require('path')
 const slsw = require('serverless-webpack')
+const webpack = require('webpack')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   entry: slsw.lib.entries,
@@ -32,10 +34,17 @@ module.exports = {
   resolve: {
     symlinks: true
   },
+
   output: {
     libraryTarget: 'commonjs2',
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
     sourceMapFilename: '[file].map'
-  }
+  },
+
+  plugins: [
+    // new webpack.IgnorePlugin(/\/iconv-loader$/),
+    // FIXME: Only in production mode!
+    // new UglifyJsPlugin()
+  ]
 }

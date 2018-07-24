@@ -2,7 +2,11 @@
 node_modules
 jspm_packages
 
+
+.config 
+
 # Serverless directories
 .serverless
+.webpack
 dist
 yarn-error.log
