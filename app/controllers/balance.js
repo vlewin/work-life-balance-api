@@ -105,11 +105,12 @@ module.exports = {
         const params = Validator.validate(balance, 'update_balance')
         await Balance.update(params)
 
+        console.log('*** GraphQl mutation')
         // FIXME: Use webpack loader
         // https://www.npmjs.com/package/webpack-graphql-loader
         const query = `
           mutation UpdateBalance($user_id: String!, $vacation: Int, $sickness: Int, $total: Float) {
-            updateBalanceDevelopment(
+            updateBalance(
               input: {
                 user_id: $user_id, 
                 vacation: $vacation, 

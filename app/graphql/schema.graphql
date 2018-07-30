@@ -1,0 +1,111 @@
+﻿type Balance {
+  sickness: Int
+  total: Float
+  user_id: String!
+  vacation: Int
+}
+
+type BalanceConnection {
+  items: [Balance]
+  nextToken: String
+}
+
+type Mutation {
+  createBalance(input: CreateBalanceInput!): Balance
+  deleteBalance(input: DeleteBalanceInput!): Balance
+  updateBalance(input: UpdateBalanceInput!): Balance
+}
+
+type Query {
+  getBalance(user_id: String!): Balance
+  listBalances(filter: TableBalanceFilterInput, limit: Int, nextToken: String): BalanceConnection
+}
+
+type Subscription {
+  onCreateBalance(sickness: Int, total: Float, user_id: String, vacation: Int): Balance
+    @aws_subscribe(mutations:["createBalance"])
+  onDeleteBalance(sickness: Int, total: Float, user_id: String, vacation: Int): Balance
+    @aws_subscribe(mutations:["deleteBalance"])
+  onUpdateBalance(sickness: Int, total: Float, user_id: String, vacation: Int): Balance
+    @aws_subscribe(mutations:["updateBalance"])
+}
+
+input CreateBalanceInput {
+  sickness: String
+  total: Float
+  user_id: String!
+  vacation: String
+}
+
+input DeleteBalanceInput {
+  user_id: String!
+}
+
+input TableBalanceFilterInput {
+  sickness: TableStringFilterInput
+  total: TableFloatFilterInput
+  user_id: TableStringFilterInput
+  vacation: TableStringFilterInput
+}
+
+input TableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input TableFloatFilterInput {
+  between: [Float]
+  contains: Float
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+  notContains: Float
+}
+
+input TableIDFilterInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+}
+
+input TableIntFilterInput {
+  between: [Int]
+  contains: Int
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+  notContains: Int
+}
+
+input TableStringFilterInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+}
+
+input UpdateBalanceInput {
+  sickness: Int
+  total: Float
+  user_id: String!
+  vacation: Int
+}

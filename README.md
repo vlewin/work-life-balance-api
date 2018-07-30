@@ -85,3 +85,33 @@ const combinedOptionsObject = {
 
 console.log(combinedOptionsObject); // => { foo: false, bar: 200, zaz: 'hi', yolo: true }
 ```
+
+### Graphql examples
+
+```
+  query getBalance {
+    getBalance(user_id: "auth0|5b0fd1cb21652a131b051f7a") {
+      user_id
+      vacation
+    }
+  }
+  mutation PutBalance {
+    updateBalance(input: {
+      user_id: "auth0|5b0fd1cb21652a131b051f7a",
+      vacation: 3
+      sickness: 3
+      total: 1.0
+    }) {
+      user_id
+      vacation
+      sickness
+      total
+  	}
+  }
+
+  subscription updateBalance {
+      onUpdateBalance {
+        user_id
+      }
+  }
+```
